@@ -63,7 +63,7 @@ export function HeroSearch() {
       onSubmit={onSubmit}
       role="search"
       aria-label="Search homes"
-      className="mt-8 max-w-[620px] overflow-hidden rounded-[14px] border border-border bg-white shadow-card"
+      className="hero-form max-w-[620px] overflow-hidden rounded-[14px] border border-border bg-white shadow-card"
     >
       <div role="tablist" aria-label="Search type" className="flex flex-wrap gap-0.5 border-b border-hairline px-2 pt-2">
         {TABS.map((t, i) => {
@@ -82,7 +82,7 @@ export function HeroSearch() {
               tabIndex={selected ? 0 : -1}
               onClick={() => setTab(t)}
               onKeyDown={(e) => onTabKey(e, i)}
-              className={`focus-inset min-h-11 cursor-pointer whitespace-nowrap rounded-md border-0 border-b-2 bg-transparent px-4 py-3 text-[14px] font-bold transition-colors ${
+              className={`hero-tab focus-inset min-h-11 cursor-pointer whitespace-nowrap rounded-md border-0 border-b-2 bg-transparent px-4 text-[14px] font-bold transition-colors ${
                 selected ? "border-navy text-navy" : "border-transparent text-meta hover:text-navy"
               }`}
               style={{ borderRadius: "6px 6px 0 0" }}
@@ -92,11 +92,11 @@ export function HeroSearch() {
           );
         })}
       </div>
-      <div id={`${id}-panel`} role="tabpanel" aria-labelledby={`${id}-tab-${TABS.indexOf(tab)}`} className="p-[18px]">
+      <div id={`${id}-panel`} role="tabpanel" aria-labelledby={`${id}-tab-${TABS.indexOf(tab)}`} className="hero-form-body">
         <label htmlFor={`${id}-q`} className="sr-only">
           {isSearch ? "Location" : "Property address"}
         </label>
-        <div className="flex h-[54px] items-center gap-3 rounded-[10px] border-[1.5px] border-border-input bg-white px-4 transition-colors focus-within:border-navy">
+        <div className="hero-field flex items-center gap-3 rounded-[10px] border-[1.5px] border-border-input bg-white px-4 transition-colors focus-within:border-navy">
           <span aria-hidden="true" className="h-[18px] w-[18px] flex-none rounded-full border-2 border-navy" />
           <input
             id={`${id}-q`}
@@ -119,7 +119,7 @@ export function HeroSearch() {
                 <label htmlFor={`${id}-${name}`} className="sr-only">
                   {label as string}
                 </label>
-                <select id={`${id}-${name}`} name={name as string} className="select h-[50px] px-3.5 text-[14px] font-semibold">
+                <select id={`${id}-${name}`} name={name as string} className="select hero-select px-3.5 text-[14px] font-semibold">
                   {(opts as string[]).map((o) => (
                     <option key={o} value={o}>
                       {o}
@@ -131,11 +131,11 @@ export function HeroSearch() {
           </div>
         )}
 
-        <div className="mt-3.5 flex flex-wrap items-center justify-between gap-3">
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
           <Link href={moreHref} className="inline-flex min-h-11 items-center py-2 text-[13.5px] font-semibold text-slate underline underline-offset-[3px]">
             {moreLabel}
           </Link>
-          <button type="submit" className="btn-gold px-[30px]">
+          <button type="submit" className="btn-gold hero-cta px-[30px]">
             {ctaLabel}
           </button>
         </div>

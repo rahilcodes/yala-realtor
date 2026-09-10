@@ -282,6 +282,110 @@
   }
 }
 
+/* ---------------------------------------------------------------------------
+   Home hero: fits above the fold on desktop. Every vertical measure scales
+   with viewport height (vh) between a mobile floor and the design's max.
+   --------------------------------------------------------------------------- */
+.hero {
+  --hero-pt: clamp(20px, 3.5vh, 56px);
+  --hero-pb: clamp(16px, 2.8vh, 48px);
+  --hero-gap: clamp(12px, 2vh, 22px);
+  --hero-field: clamp(46px, 5.4vh, 54px);
+  --hero-select: clamp(44px, 5vh, 50px);
+  --hero-cta: clamp(46px, 5.2vh, 52px);
+  --hero-title: clamp(36px, min(4.8vw, 7vh), 60px);
+  --hero-lede: clamp(15px, 1.7vh, 17px);
+  padding-block: var(--hero-pt) var(--hero-pb);
+}
+@media (min-width: 1000px) {
+  .hero {
+    /* Fill exactly one screen below the 76px nav; contents are sized to fit inside it. */
+    min-height: calc(100svh - 76px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .hero-grid {
+    align-items: stretch;
+  }
+  .hero-map {
+    height: 100%;
+    min-height: clamp(360px, 52vh, 520px);
+  }
+  /* Keep the popular-search chips on one line above the fold. */
+  .hero-popular {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+  .hero-popular::-webkit-scrollbar {
+    display: none;
+  }
+  .hero-popular {
+    gap: 6px;
+  }
+  .hero-popular .chip {
+    padding-inline: 10px;
+    font-size: 12.5px;
+  }
+}
+/* Short-and-wide viewports (small laptops at high scaling): drop the optional row and tighten. */
+@media (min-width: 1000px) and (max-height: 640px) {
+  .hero-popular {
+    display: none;
+  }
+  .hero {
+    --hero-pt: 16px;
+    --hero-pb: 14px;
+    --hero-gap: 10px;
+    --hero-lede: 14px;
+  }
+  .hero-lede {
+    margin-top: 8px;
+  }
+  .hero-form {
+    margin-top: 12px;
+  }
+}
+.hero-map {
+  min-height: clamp(360px, 52vh, 520px);
+}
+.hero-title {
+  font-size: var(--hero-title);
+  margin-top: var(--hero-gap);
+}
+.hero-lede {
+  font-size: var(--hero-lede);
+  margin-top: clamp(10px, 1.8vh, 18px);
+}
+.hero-form {
+  margin-top: clamp(14px, 2.6vh, 32px);
+}
+.hero-form-body {
+  padding: clamp(12px, 1.8vh, 18px);
+}
+.hero-tab {
+  padding-block: clamp(9px, 1.3vh, 12px);
+}
+.hero-field {
+  height: var(--hero-field);
+}
+.hero-select {
+  height: var(--hero-select);
+}
+.hero-cta {
+  height: var(--hero-cta);
+}
+.hero-popular {
+  margin-top: clamp(10px, 1.8vh, 20px);
+}
+@media (min-width: 1000px) {
+  .hero-popular .chip {
+    min-height: clamp(36px, 4.4vh, 44px);
+  }
+}
+
 /* Range slider (payment estimate). */
 input[type="range"].range {
   accent-color: var(--color-navy);

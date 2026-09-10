@@ -22,21 +22,21 @@ export default async function HomePage() {
   return (
     <>
       {/* HERO */}
-      <section className="bg-gradient-to-b from-cloud to-white">
-        <div className="container-1200 grid grid-cols-[repeat(auto-fit,minmax(min(100%,420px),1fr))] items-center gap-10 pb-12 pt-14">
+      <section className="hero bg-gradient-to-b from-cloud to-white">
+        <div className="hero-grid container-1200 grid grid-cols-[repeat(auto-fit,minmax(min(100%,420px),1fr))] items-center gap-x-10 gap-y-8">
           <div>
             <div className="inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-line bg-white py-1.5 pl-2 pr-3 text-[12px] font-semibold text-slate">
               <span aria-hidden="true" className="inline-block h-2 w-2 flex-none rounded-full bg-success" />
               {liveCount} live listings · Orange County
             </div>
-            <h1 className="mt-[22px] font-serif font-medium leading-[1.06] tracking-[-0.02em] text-navy text-balance" style={{ fontSize: "clamp(38px, 5vw, 60px)" }}>
+            <h1 className="hero-title font-serif font-medium leading-[1.06] tracking-[-0.02em] text-navy text-balance">
               Find your next home in Orange County.
             </h1>
-            <p className="mt-[18px] max-w-[520px] text-[17px] leading-[1.6] text-slate-2">
+            <p className="hero-lede max-w-[520px] leading-[1.55] text-slate-2">
               Search every MLS listing in real time, save searches, and get alerts the minute something new hits the market.
             </p>
             <HeroSearch />
-            <div className="mt-5 flex flex-wrap items-center gap-2 text-[13px] font-semibold text-meta">
+            <div className="hero-popular flex flex-wrap items-center gap-2 text-[13px] font-semibold text-meta">
               Popular:
               {POPULAR.map((p) => (
                 <Link key={p} href={`/listings?q=${encodeURIComponent(p)}`} className="chip text-navy">
@@ -49,11 +49,11 @@ export default async function HomePage() {
           <Link
             href="/listings"
             aria-label="Open map search"
-            className="relative block overflow-hidden rounded-2xl no-underline"
+            className="hero-map relative block overflow-hidden rounded-2xl no-underline"
           >
             <MapPanel
               label="interactive map · IDX pins · Irvine"
-              className="min-h-[520px]"
+              className="h-full min-h-[inherit]"
               pins={[
                 { label: "$1.85M", x: "38%", y: "30%" },
                 { label: "$2.4M", x: "62%", y: "22%" },
