@@ -42,7 +42,8 @@ export default function AboutPage() {
             label="Butchi Reddy Yalamuri, natural light"
             kind="portrait"
             tone="warm"
-            labelPosition="top"
+            src="/images/agent_portrait.jpg"
+            labelPosition="none"
             className="aspect-[4/5] max-h-[600px] rounded-lg"
             priority
             sizes="(max-width: 800px) 100vw, 480px"

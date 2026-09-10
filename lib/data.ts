@@ -53,6 +53,7 @@ function L(
   kind: BadgeKind,
   photo: string,
   extra: Extra = {},
+  photoSrc?: string,
 ): Listing {
   const [badgeBg, badgeFg] = BADGE[kind];
   return {
@@ -78,6 +79,7 @@ function L(
     badgeBg,
     badgeFg,
     photo,
+    photoSrc,
     status: kind === "sold" ? "Sold" : kind === "pending" ? "Pending" : kind === "soon" ? "Coming Soon" : "Active",
     specs: `${beds} bd · ${baths} ba · ${num(sqft)} sqft`,
     fullAddress: `${address}, ${city}, CA ${zip}`,
@@ -88,24 +90,24 @@ function L(
 }
 
 const listings: Listing[] = [
-  L(1, "OC24188214", 1295000, "78 Winding Way", "Irvine", "92602", 4, 3, 2410, 5200, "Single Family", "Northwood Pointe", 0, "New · 2 hrs", "new", "two-story exterior, dusk", { year: 1998, hoa: 120, garage: 2, pool: "Community" }),
-  L(2, "OC24187902", 1850000, "24 Shadowbrook", "Irvine", "92604", 5, 4, 3120, 6800, "Single Family", "Woodbridge", 1, "New · Today", "new", "lakefront exterior", { year: 1986, hoa: 155, garage: 3, pool: "Private" }),
-  L(3, "NP24186331", 4395000, "1207 Bayside Dr", "Newport Beach", "92625", 4, 4.5, 3480, 7100, "Single Family", "Corona del Mar", 4, "Open Sat 1–4", "open", "ocean-view terrace", { year: 2016, hoa: 0, garage: 2, pool: "None" }),
-  L(4, "PW24185540", 1449000, "15 Corte Vista", "Tustin", "92782", 4, 3, 2650, 5900, "Single Family", "Tustin Ranch", 18, "Price ↓ $26K", "drop", "front elevation, palms", { year: 1994, hoa: 98, garage: 2, pool: "Community" }),
-  L(5, "OC24188101", 989000, "3 Cordoba", "Irvine", "92614", 3, 2.5, 1680, 0, "Condo", "Westpark", 1, "New · 1 day", "new", "courtyard entry", { year: 1989, hoa: 310, garage: 2, pool: "Community" }),
-  L(6, "OC24188420", 2150000, "28481 Rancho Grande", "Laguna Niguel", "92677", 5, 4, 3560, 9400, "Single Family", "Rancho Niguel", 0, "Coming Soon", "soon", "hillside backyard", { year: 1990, hoa: 85, garage: 3, pool: "Private" }),
-  L(7, "OC24187750", 2480000, "108 Chorus", "Irvine", "92618", 4, 4, 2990, 4300, "Single Family", "Great Park · Rise", 3, "New · 3 days", "new", "modern farmhouse exterior", { year: 2021, hoa: 235, garage: 2, pool: "Community" }),
-  L(8, "NP24186007", 1125000, "2211 Elden Ave #B", "Costa Mesa", "92627", 3, 2.5, 1740, 0, "Townhouse", "Eastside Costa Mesa", 6, "6 days", "days", "rooftop deck", { year: 2019, hoa: 260, garage: 2, pool: "None" }),
-  L(9, "NP24185122", 7900000, "22 Pelican Point Dr", "Newport Coast", "92657", 5, 6, 5410, 12800, "Single Family", "Pelican Point", 2, "Just Listed", "new", "coastal estate, pool", { year: 2004, hoa: 780, garage: 4, pool: "Private" }),
-  L(10, "OC24184880", 1675000, "26 Bell Chime", "Irvine", "92618", 4, 3, 2380, 4100, "Single Family", "Portola Springs", 12, "Pending", "pending", "great room, open plan", { year: 2015, hoa: 190, garage: 2, pool: "Community" }),
-  L(11, "OC24185961", 1299000, "25181 Rivendell Dr", "Lake Forest", "92630", 4, 3, 2210, 6000, "Single Family", "Lake Forest Keys", 9, "9 days", "days", "backyard, lake access", { year: 1979, hoa: 140, garage: 2, pool: "Community" }),
-  L(12, "OC24185300", 1725000, "27 Via Cancion", "San Clemente", "92673", 4, 3, 2760, 6500, "Single Family", "Talega", 14, "14 days", "days", "spanish exterior, canyon view", { year: 2003, hoa: 265, garage: 3, pool: "Community" }),
+  L(1, "OC24188214", 1295000, "78 Winding Way", "Irvine", "92602", 4, 3, 2410, 5200, "Single Family", "Northwood Pointe", 0, "New · 2 hrs", "new", "two-story exterior, dusk", { year: 1998, hoa: 120, garage: 2, pool: "Community" }, "/images/two_story_dusk.jpg"),
+  L(2, "OC24187902", 1850000, "24 Shadowbrook", "Irvine", "92604", 5, 4, 3120, 6800, "Single Family", "Woodbridge", 1, "New · Today", "new", "lakefront exterior", { year: 1986, hoa: 155, garage: 3, pool: "Private" }, "/images/lakefront_exterior.jpg"),
+  L(3, "NP24186331", 4395000, "1207 Bayside Dr", "Newport Beach", "92625", 4, 4.5, 3480, 7100, "Single Family", "Corona del Mar", 4, "Open Sat 1–4", "open", "ocean-view terrace", { year: 2016, hoa: 0, garage: 2, pool: "None" }, "/images/ocean_terrace.jpg"),
+  L(4, "PW24185540", 1449000, "15 Corte Vista", "Tustin", "92782", 4, 3, 2650, 5900, "Single Family", "Tustin Ranch", 18, "Price ↓ $26K", "drop", "front elevation, palms", { year: 1994, hoa: 98, garage: 2, pool: "Community" }, "/images/modern_farmhouse.jpg"),
+  L(5, "OC24188101", 989000, "3 Cordoba", "Irvine", "92614", 3, 2.5, 1680, 0, "Condo", "Westpark", 1, "New · 1 day", "new", "courtyard entry", { year: 1989, hoa: 310, garage: 2, pool: "Community" }, "/images/courtyard_entry.jpg"),
+  L(6, "OC24188420", 2150000, "28481 Rancho Grande", "Laguna Niguel", "92677", 5, 4, 3560, 9400, "Single Family", "Rancho Niguel", 0, "Coming Soon", "soon", "hillside backyard", { year: 1990, hoa: 85, garage: 3, pool: "Private" }, "/images/sell_hero.jpg"),
+  L(7, "OC24187750", 2480000, "108 Chorus", "Irvine", "92618", 4, 4, 2990, 4300, "Single Family", "Great Park · Rise", 3, "New · 3 days", "new", "modern farmhouse exterior", { year: 2021, hoa: 235, garage: 2, pool: "Community" }, "/images/modern_farmhouse.jpg"),
+  L(8, "NP24186007", 1125000, "2211 Elden Ave #B", "Costa Mesa", "92627", 3, 2.5, 1740, 0, "Townhouse", "Eastside Costa Mesa", 6, "6 days", "days", "rooftop deck", { year: 2019, hoa: 260, garage: 2, pool: "None" }, "/images/ocean_terrace.jpg"),
+  L(9, "NP24185122", 7900000, "22 Pelican Point Dr", "Newport Coast", "92657", 5, 6, 5410, 12800, "Single Family", "Pelican Point", 2, "Just Listed", "new", "coastal estate, pool", { year: 2004, hoa: 780, garage: 4, pool: "Private" }, "/images/coastal_estate.jpg"),
+  L(10, "OC24184880", 1675000, "26 Bell Chime", "Irvine", "92618", 4, 3, 2380, 4100, "Single Family", "Portola Springs", 12, "Pending", "pending", "great room, open plan", { year: 2015, hoa: 190, garage: 2, pool: "Community" }, "/images/sell_hero.jpg"),
+  L(11, "OC24185961", 1299000, "25181 Rivendell Dr", "Lake Forest", "92630", 4, 3, 2210, 6000, "Single Family", "Lake Forest Keys", 9, "9 days", "days", "backyard, lake access", { year: 1979, hoa: 140, garage: 2, pool: "Community" }, "/images/lakefront_exterior.jpg"),
+  L(12, "OC24185300", 1725000, "27 Via Cancion", "San Clemente", "92673", 4, 3, 2760, 6500, "Single Family", "Talega", 14, "14 days", "days", "spanish exterior, canyon view", { year: 2003, hoa: 265, garage: 3, pool: "Community" }, "/images/two_story_dusk.jpg"),
 ];
 
 const sold: Listing[] = [
-  L(101, "OC24170211", 2410000, "41 Cezanne", "Irvine", "92603", 4, 4, 3050, 7200, "Single Family", "Turtle Rock", 8, "Sold · 8 days", "sold", "hillside exterior", { listPrice: money(2295000), over: "+5.0% over list" }),
-  L(102, "OC24168903", 1180000, "19 Lakepines", "Irvine", "92620", 3, 2.5, 1620, 0, "Condo", "Woodbridge", 6, "Sold · 6 days", "sold", "lake view balcony", { listPrice: money(1099000), over: "+7.4% over list" }),
-  L(103, "NP24165578", 3650000, "1521 Santiago Dr", "Newport Beach", "92660", 4, 3.5, 3210, 8900, "Single Family", "Dover Shores", 21, "Sold · 21 days", "sold", "bay-view living room", { listPrice: money(3695000), over: "98.8% of list" }),
+  L(101, "OC24170211", 2410000, "41 Cezanne", "Irvine", "92603", 4, 4, 3050, 7200, "Single Family", "Turtle Rock", 8, "Sold · 8 days", "sold", "hillside exterior", { listPrice: money(2295000), over: "+5.0% over list" }, "/images/two_story_dusk.jpg"),
+  L(102, "OC24168903", 1180000, "19 Lakepines", "Irvine", "92620", 3, 2.5, 1620, 0, "Condo", "Woodbridge", 6, "Sold · 6 days", "sold", "lake view balcony", { listPrice: money(1099000), over: "+7.4% over list" }, "/images/lakefront_exterior.jpg"),
+  L(103, "NP24165578", 3650000, "1521 Santiago Dr", "Newport Beach", "92660", 4, 3.5, 3210, 8900, "Single Family", "Dover Shores", 21, "Sold · 21 days", "sold", "bay-view living room", { listPrice: money(3695000), over: "98.8% of list" }, "/images/ocean_terrace.jpg"),
 ];
 
 const market: MarketStat[] = [
@@ -124,32 +126,33 @@ const testimonials: Testimonial[] = [
 const slugify = (s: string) =>
   s.toLowerCase().replace(/[’']/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
-const P = (title: string, cat: PostCategory, date: string, read: string, photo: string, excerpt: string): Post => ({
+const P = (title: string, cat: PostCategory, date: string, read: string, photo: string, excerpt: string, photoSrc?: string): Post => ({
   slug: slugify(title),
   title,
   cat,
   date,
   read,
   photo,
+  photoSrc,
   excerpt,
 });
 
 const posts: Post[] = [
-  P("Irvine's fall 2026 market: what buyers should expect", "Market Update", "Sep 3, 2026", "6 min", "irvine skyline, golden hour", "Inventory is up 11% year over year, but well-priced homes in Northwood and Woodbridge are still going in under two weeks. Here is how to position an offer."),
-  P("How the Great Park build-out is reshaping north Irvine prices", "Neighborhoods", "Aug 27, 2026", "8 min", "great park aerial", "New phases in Solis Park and Rise are pulling median prices north of $2.3M. We break down HOA, Mello-Roos, and resale trends by village."),
-  P("Mello-Roos, explained for first-time Irvine buyers", "Buying", "Aug 19, 2026", "5 min", "tax bill close-up", "What the special tax actually funds, how long it lasts, and how to compare two homes with very different bills."),
-  P("Pricing your Orange County home in a 24-day market", "Selling", "Aug 12, 2026", "7 min", "staged living room", "Why the first ten days decide everything, and the three pricing bands we model before any listing goes live."),
-  P("Newport Beach vs. Corona del Mar: a side-by-side for luxury buyers", "Neighborhoods", "Aug 5, 2026", "9 min", "corona del mar coastline", "Lot sizes, walkability, view premiums, and what $4M buys on each side of PCH."),
-  P("Rate buydowns and seller credits: what's actually negotiable in 2026", "Financing", "Jul 29, 2026", "6 min", "closing table", "Seller-paid 2-1 buydowns are back. When they beat a price cut, and how to structure one so the appraisal holds."),
+  P("Irvine's fall 2026 market: what buyers should expect", "Market Update", "Sep 3, 2026", "6 min", "irvine skyline, golden hour", "Inventory is up 11% year over year, but well-priced homes in Northwood and Woodbridge are still going in under two weeks. Here is how to position an offer.", "/images/two_story_dusk.jpg"),
+  P("How the Great Park build-out is reshaping north Irvine prices", "Neighborhoods", "Aug 27, 2026", "8 min", "great park aerial", "New phases in Solis Park and Rise are pulling median prices north of $2.3M. We break down HOA, Mello-Roos, and resale trends by village.", "/images/modern_farmhouse.jpg"),
+  P("Mello-Roos, explained for first-time Irvine buyers", "Buying", "Aug 19, 2026", "5 min", "tax bill close-up", "What the special tax actually funds, how long it lasts, and how to compare two homes with very different bills.", "/images/buy_hero.jpg"),
+  P("Pricing your Orange County home in a 24-day market", "Selling", "Aug 12, 2026", "7 min", "staged living room", "Why the first ten days decide everything, and the three pricing bands we model before any listing goes live.", "/images/sell_hero.jpg"),
+  P("Newport Beach vs. Corona del Mar: a side-by-side for luxury buyers", "Neighborhoods", "Aug 5, 2026", "9 min", "corona del mar coastline", "Lot sizes, walkability, view premiums, and what $4M buys on each side of PCH.", "/images/ocean_terrace.jpg"),
+  P("Rate buydowns and seller credits: what's actually negotiable in 2026", "Financing", "Jul 29, 2026", "6 min", "closing table", "Seller-paid 2-1 buydowns are back. When they beat a price cut, and how to structure one so the appraisal holds.", "/images/coastal_estate.jpg"),
 ];
 
 export const POST_CATEGORIES: Array<"All" | PostCategory> = ["All", "Market Update", "Neighborhoods", "Buying", "Selling", "Financing"];
 
 const neighborhoods: Neighborhood[] = [
-  { name: "Irvine", median: "$1.48M", dom: "18 days", note: "Master-planned villages, top-ranked schools, strong HOA standards.", photo: "irvine village street" },
-  { name: "Newport Beach", median: "$3.60M", dom: "41 days", note: "Harbor, coastal bluffs, and the Corona del Mar village.", photo: "newport harbor" },
-  { name: "Tustin Ranch", median: "$1.42M", dom: "21 days", note: "Golf-course community with quick access to the 5 and 261.", photo: "tustin ranch golf" },
-  { name: "Laguna Niguel", median: "$1.55M", dom: "27 days", note: "Hillside lots, larger yards, ten minutes to Dana Point.", photo: "laguna niguel hills" },
+  { name: "Irvine", median: "$1.48M", dom: "18 days", note: "Master-planned villages, top-ranked schools, strong HOA standards.", photo: "irvine village street", photoSrc: "/images/modern_farmhouse.jpg" },
+  { name: "Newport Beach", median: "$3.60M", dom: "41 days", note: "Harbor, coastal bluffs, and the Corona del Mar village.", photo: "newport harbor", photoSrc: "/images/ocean_terrace.jpg" },
+  { name: "Tustin Ranch", median: "$1.42M", dom: "21 days", note: "Golf-course community with quick access to the 5 and 261.", photo: "tustin ranch golf", photoSrc: "/images/two_story_dusk.jpg" },
+  { name: "Laguna Niguel", median: "$1.55M", dom: "27 days", note: "Hillside lots, larger yards, ten minutes to Dana Point.", photo: "laguna niguel hills", photoSrc: "/images/coastal_estate.jpg" },
 ];
 
 export const agent: Agent = {
@@ -162,6 +165,7 @@ export const agent: Agent = {
   phone: "(949) 522-1103",
   phoneHref: "tel:9495221103",
   email: "butchi@yalarealty.com",
+  photoSrc: "/images/agent_portrait.jpg",
 };
 
 /** Placeholder count for the live-listing headline until the Phase 2 feed. */

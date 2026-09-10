@@ -42,6 +42,7 @@ export interface Listing {
   badgeFg: string;
   /** Photo description used by the placeholder component until real media exists. */
   photo: string;
+  photoSrc?: string;
   status: ListingStatus;
   specs: string;
   fullAddress: string;
@@ -103,6 +104,7 @@ export interface Agent {
   phone: string;
   phoneHref: string;
   email: string;
+  photoSrc?: string;
 }
 
 export interface MarketStat {
@@ -127,6 +129,7 @@ export interface Post {
   date: string;
   read: string;
   photo: string;
+  photoSrc?: string;
   excerpt: string;
 }
 
@@ -136,6 +139,7 @@ export interface Neighborhood {
   dom: string;
   note: string;
   photo: string;
+  photoSrc?: string;
 }
 
 export type ListingSort = "new" | "asc" | "desc" | "sqft";

@@ -18,6 +18,7 @@ export function ListingCard({ item, priority }: Props) {
     <article className="card-hover relative flex h-full flex-col overflow-hidden rounded-[14px] border border-border bg-white">
       <Photo
         label={item.photo}
+        src={item.photoSrc}
         className="aspect-[4/3]"
         priority={priority}
         sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 320px"

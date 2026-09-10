@@ -23,7 +23,7 @@ export function MapPanel({ label, pins = [], className = "", children, ariaLabel
   const position = className.split(" ").includes("absolute") ? "" : "relative";
   return (
     <div role="img" aria-label={`${ariaLabel} placeholder: ${label}`} className={`${position} overflow-hidden rounded-2xl border border-border bg-map ${className}`}>
-      <Photo label={label} kind="map" tone="map" labelPosition="top" className="absolute inset-0" sizes="(max-width: 1000px) 100vw, 40vw" />
+      <Photo label={label} kind="map" tone="map" src="/images/map_orange_county.jpg" labelPosition="none" className="absolute inset-0" sizes="(max-width: 1000px) 100vw, 40vw" />
       {pins.map((p, i) => (
         <span
           key={i}

@@ -76,7 +76,7 @@ export default async function BuyPage() {
               ))}
             </dl>
           </div>
-          <Photo label="family at front door, keys in hand" labelPosition="top" className="min-h-[420px] rounded-[18px]" priority>
+          <Photo label="family at front door, keys in hand" src="/images/buy_hero.jpg" labelPosition="none" className="min-h-[420px] rounded-[18px]" priority>
             <figure className="absolute bottom-5 left-5 right-5 m-0 flex items-center gap-3.5 rounded-xl bg-white px-[18px] py-4 shadow-float">
               <span aria-hidden="true" className="text-[15px] tracking-[2px] text-gold">
                 ★★★★★

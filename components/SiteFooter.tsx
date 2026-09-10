@@ -13,16 +13,34 @@ const EXPLORE = [
 
 const LEGAL = ["Privacy", "Terms", "Accessibility", "DMCA"];
 
-function ComplianceLogo({ label, short }: { label: string; short: string }) {
+function ComplianceLogo({ type, label }: { type: "eho" | "realtor" | "mls"; label: string }) {
   return (
     <div
       role="img"
       aria-label={label}
-      className="flex h-11 w-11 items-center justify-center rounded border-[1.5px] border-white/40 text-center font-mono text-[8px] font-bold leading-[1.1] text-white/70"
+      title={label}
+      className="flex h-11 w-11 items-center justify-center rounded border border-white/30 bg-white/5 p-1.5 text-white/80 transition-colors hover:border-gold hover:text-gold"
     >
-      {short}
-      <br />
-      logo
+      {type === "eho" && (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-full w-full">
+          {/* House outline */}
+          <path d="M3 10.5L12 3l9 7.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1v-9.5z" strokeLinecap="round" strokeLinejoin="round" />
+          {/* Equal sign */}
+          <line x1="8" y1="12" x2="16" y2="12" strokeWidth="2" strokeLinecap="round" />
+          <line x1="8" y1="15.5" x2="16" y2="15.5" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+      )}
+      {type === "realtor" && (
+        <svg viewBox="0 0 24 24" fill="currentColor" className="h-full w-full">
+          <path d="M4 3h16a1 1 0 011 1v16a1 1 0 01-1 1H4a1 1 0 01-1-1V4a1 1 0 011-1zm5 4v10h2.5v-3.5h1.8l2.2 3.5H18l-2.6-4c1.2-.5 1.9-1.5 1.9-3 0-2-1.5-3-4-3H9zm2.5 2.2h1.8c.8 0 1.4.3 1.4 1s-.6 1-1.4 1H11.5V9.2z" />
+        </svg>
+      )}
+      {type === "mls" && (
+        <div className="flex flex-col items-center justify-center text-center leading-none">
+          <span className="font-mono text-[10px] font-black tracking-widest text-white">MLS</span>
+          <span className="text-[7px] font-semibold text-gold uppercase tracking-tighter">CRMLS</span>
+        </div>
+      )}
     </div>
   );
 }
@@ -112,9 +130,9 @@ export function SiteFooter() {
         {/* Compliance */}
         <div className="mt-14 flex flex-wrap items-start justify-between gap-x-8 gap-y-5 border-t border-white/[0.14] pt-6">
           <div className="flex flex-wrap items-center gap-3">
-            <ComplianceLogo label="Equal Housing Opportunity" short="EHO" />
-            <ComplianceLogo label="REALTOR®" short="REALTOR" />
-            <ComplianceLogo label="CRMLS" short="MLS" />
+            <ComplianceLogo type="eho" label="Equal Housing Opportunity" />
+            <ComplianceLogo type="realtor" label="REALTOR®" />
+            <ComplianceLogo type="mls" label="CRMLS Multiple Listing Service" />
             <p className="m-0 max-w-[640px] text-[12px] leading-[1.6] text-white/[0.65]">
               Butchi Reddy Yalamuri · CA DRE #00000000 · YALA Realty &amp; Associates, CA DRE #00000000. Equal Housing Opportunity.
               Listing data provided by CRMLS; information deemed reliable but not guaranteed and should be independently verified. IDX

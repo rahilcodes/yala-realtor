@@ -87,7 +87,7 @@ export default async function SellPage({ searchParams }: PageProps<"/sell">) {
           <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-5">
             {sold.map((s) => (
               <article key={s.mls} className="overflow-hidden rounded-[14px] border border-border bg-white">
-                <Photo label={s.photo} className="aspect-video" sizes="(max-width: 700px) 100vw, 380px">
+                <Photo label={s.photo} src={s.photoSrc} className="aspect-video" sizes="(max-width: 700px) 100vw, 380px">
                   <span className="badge absolute left-3 top-3" style={{ background: s.badgeBg, color: s.badgeFg }}>
                     {s.badge}
                   </span>
