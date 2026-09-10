@@ -1,0 +1,296 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Design tokens (YALA Design System v1)
+   --------------------------------------------------------------------------- */
+@theme {
+  --color-navy: #0b1f3a;
+  --color-ink: #14294a;
+  --color-gold: #c9a961;
+  --color-gold-hover: #b8974e;
+  --color-gold-deep: #8a6d2f;
+  --color-champagne: #ead9b0;
+  --color-cloud: #f5f7fa;
+  --color-ivory: #f7f3ec;
+  --color-ivory-border: #eee8dc;
+  --color-border: #e1e5ec;
+  --color-border-input: #d5d9e1;
+  --color-line: #e7eaf0;
+  --color-hairline: #eef0f4;
+  --color-slate: #374151;
+  --color-slate-2: #4b5563;
+  --color-meta: #6b7280;
+  --color-muted: #9ca3af;
+  --color-success: #2e9e6b;
+  --color-success-soft: #e8f5ee;
+  --color-success-ink: #1f6e4a;
+  --color-error: #c0392b;
+  --color-mist: #d5dce6;
+  --color-mist-deep: #c9d2de;
+  --color-sand: #e2d9ca;
+  --color-sand-deep: #6b6252;
+  --color-map: #edf0f5;
+
+  --font-sans: var(--font-manrope), "Manrope", system-ui, sans-serif;
+  --font-serif: var(--font-newsreader), "Newsreader", Georgia, serif;
+  --font-wordmark: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+
+  --shadow-card: 0 20px 50px rgba(11, 31, 58, 0.1);
+  --shadow-card-hover: 0 20px 50px rgba(11, 31, 58, 0.12);
+  --shadow-float: 0 16px 40px rgba(11, 31, 58, 0.18);
+  --shadow-pin: 0 6px 16px rgba(11, 31, 58, 0.3);
+  --shadow-badge: 0 2px 8px rgba(11, 31, 58, 0.15);
+  --shadow-panel: 0 30px 60px rgba(0, 0, 0, 0.25);
+  --shadow-soft: 0 20px 50px rgba(11, 31, 58, 0.08);
+  --shadow-btn: 0 4px 14px rgba(11, 31, 58, 0.2);
+
+  --breakpoint-nav: 1000px;
+
+  --ease-out-soft: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* ---------------------------------------------------------------------------
+   Base
+   --------------------------------------------------------------------------- */
+@layer base {
+  html {
+    color-scheme: light;
+  }
+  body {
+    @apply bg-white text-navy font-sans antialiased;
+  }
+  a {
+    @apply text-navy;
+  }
+  input,
+  select,
+  textarea,
+  button {
+    font-family: inherit;
+  }
+  /* WCAG 2.1 AA visible focus: 3px gold ring, offset 2px. */
+  :focus-visible {
+    outline: 3px solid var(--color-gold);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Components
+   --------------------------------------------------------------------------- */
+@layer components {
+  .container-1200 {
+    @apply mx-auto w-full max-w-[1200px] px-6;
+  }
+  .container-1400 {
+    @apply mx-auto w-full max-w-[1400px] px-6;
+  }
+
+  .eyebrow {
+    @apply font-sans text-[12px] font-bold uppercase tracking-[0.14em] text-gold-deep;
+  }
+  .eyebrow-light {
+    @apply font-sans text-[12px] font-bold uppercase tracking-[0.14em] text-champagne;
+  }
+  .h-display {
+    @apply font-serif font-medium leading-[1.08] tracking-[-0.02em] text-navy;
+    font-size: clamp(36px, 4.5vw, 56px);
+  }
+  .h2 {
+    @apply font-serif text-[36px] font-medium leading-[1.15] tracking-[-0.02em] text-navy;
+  }
+  .h2-sm {
+    @apply font-serif text-[32px] font-medium leading-[1.15] tracking-[-0.02em] text-navy;
+  }
+  .h3 {
+    @apply font-serif text-[24px] font-medium leading-[1.2] text-navy;
+  }
+  .meta {
+    @apply text-[12.5px] font-medium text-meta;
+  }
+  .mono-label {
+    @apply font-mono text-[10.5px] uppercase tracking-[0.06em];
+  }
+
+  /* Buttons: heights 44/48/52/54, radius 8 (10 for conversion). `btn` itself is an @utility below. */
+  .btn-primary {
+    @apply btn h-12 rounded-lg bg-navy px-5 text-[14px] font-bold text-white hover:bg-ink hover:text-white;
+  }
+  .btn-gold {
+    @apply btn focus-navy h-[52px] rounded-[10px] bg-gold px-[26px] text-[15px] font-extrabold text-navy hover:bg-gold-hover hover:text-navy;
+  }
+  .btn-outline {
+    @apply btn h-12 rounded-lg border-[1.5px] border-border-input bg-white px-[18px] text-[14px] font-bold text-navy hover:border-navy hover:text-navy;
+  }
+  .btn-44 {
+    @apply h-11;
+  }
+  .btn-54 {
+    @apply h-[54px];
+  }
+  .text-link {
+    @apply inline-flex min-h-11 items-center py-2 text-[14px] font-semibold text-navy underline underline-offset-[3px] hover:text-ink;
+  }
+  /* 44px tap target for stacked link lists (footer). */
+  .list-link {
+    @apply inline-flex min-h-11 items-center no-underline;
+  }
+
+  /* Inputs */
+  .field {
+    @apply flex flex-col gap-1.5 text-[12.5px] font-semibold text-slate;
+  }
+  .input:focus,
+  .input:focus-visible {
+    @apply border-navy;
+    box-shadow: 0 0 0 3px rgba(201, 169, 97, 0.35);
+    outline: none;
+  }
+  .input[aria-invalid="true"] {
+    @apply border-error;
+  }
+  .select {
+    @apply h-12 w-full min-w-0 cursor-pointer rounded-[10px] border-[1.5px] border-border-input bg-white px-3 text-[14.5px] font-medium text-navy;
+  }
+  .select:focus-visible {
+    outline: 3px solid var(--color-gold);
+    outline-offset: 1px;
+  }
+  .textarea {
+    @apply input h-auto resize-y py-3 leading-[1.5];
+  }
+  .input-dark {
+    @apply h-12 w-full rounded-lg border-[1.5px] border-white/[0.22] bg-white/[0.06] px-3.5 text-[14.5px] text-white outline-none placeholder:text-white/60;
+  }
+  .input-dark:focus {
+    @apply border-gold;
+    box-shadow: 0 0 0 3px rgba(201, 169, 97, 0.3);
+  }
+  .checkbox {
+    @apply h-[18px] w-[18px] flex-none cursor-pointer accent-navy;
+  }
+
+  /* Chips & badges */
+  .chip {
+    @apply inline-flex min-h-11 items-center rounded-full border border-border-input bg-white px-3 py-[7px] text-[13px] font-semibold whitespace-nowrap no-underline transition-colors hover:border-navy;
+  }
+  .chip-soft {
+    @apply rounded-full bg-cloud px-3 py-[7px] text-[12.5px] font-semibold text-slate;
+  }
+  .badge {
+    @apply inline-flex rounded-md px-[9px] py-[5px] text-[11px] font-extrabold uppercase tracking-[0.06em];
+  }
+
+  /* Segmented control: aria-pressed drives the fill. */
+  .seg {
+    @apply grid overflow-hidden rounded-[10px] border-[1.5px] border-border-input;
+  }
+  .seg-btn {
+    @apply focus-inset h-11 cursor-pointer border-0 bg-white text-[14px] font-bold text-navy transition-colors;
+  }
+  .seg-btn[aria-pressed="true"] {
+    @apply bg-navy text-white;
+  }
+
+  /* Selectable tiles (day / time pickers): navy fill when pressed. */
+  .tile {
+    @apply cursor-pointer rounded-lg border-[1.5px] border-border-input bg-white text-navy transition-colors hover:border-navy;
+  }
+  .tile[aria-pressed="true"] {
+    @apply border-navy bg-navy text-white;
+  }
+
+  /* Filter pill (blog categories). */
+  .pill {
+    @apply h-10 cursor-pointer rounded-full border-[1.5px] border-border-input bg-white px-3.5 text-[13px] font-semibold text-navy transition-colors hover:border-navy;
+  }
+  .pill[aria-pressed="true"] {
+    @apply border-navy bg-navy text-white;
+  }
+
+  /* Card link hover lift */
+  .card-hover {
+    @apply transition-[box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:shadow-card-hover;
+  }
+
+  /* Visually hidden (for labels that the design hides off-screen). */
+  .sr-label {
+    @apply sr-only;
+  }
+
+  .section-head {
+    @apply mb-7 flex flex-wrap items-end justify-between gap-5;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Composable utilities (usable with @apply)
+   --------------------------------------------------------------------------- */
+@utility btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  cursor: pointer;
+  border: 0;
+  text-decoration: none;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+}
+
+@utility input {
+  height: 3rem;
+  width: 100%;
+  min-width: 0;
+  border-radius: 10px;
+  border: 1.5px solid var(--color-border-input);
+  background: #fff;
+  padding: 0 0.875rem;
+  font-size: 14.5px;
+  font-weight: 400;
+  color: var(--color-navy);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  &::placeholder {
+    color: var(--color-meta);
+  }
+}
+
+/* Navy ring on gold surfaces. */
+@utility focus-navy {
+  &:focus-visible {
+    outline-color: var(--color-navy);
+  }
+}
+/* White ring on navy surfaces where gold would vanish. */
+@utility focus-white {
+  &:focus-visible {
+    outline-color: #fff;
+  }
+}
+@utility focus-inset {
+  &:focus-visible {
+    outline-offset: -3px;
+  }
+}
+
+/* Range slider (payment estimate). */
+input[type="range"].range {
+  accent-color: var(--color-navy);
+  width: 100%;
+  height: 44px;
+  cursor: pointer;
+}
+
+/* Number / date inputs keep the same chrome as text inputs in Safari. */
+input[type="date"].input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
