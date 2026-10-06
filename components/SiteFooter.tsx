@@ -1,11 +1,14 @@
 import Link from "next/link";
 import { Wordmark } from "@/components/Wordmark";
 import { NewsletterForm } from "@/components/NewsletterForm";
+import { LINKS as EXT, SITE } from "@/lib/site";
 
 const EXPLORE = [
   ["Buy a home", "/buy"],
   ["Sell a home", "/sell"],
-  ["Search listings", "/listings"],
+  ["Featured listings", "/listings"],
+  ["The YALA Advantage", "/advantage"],
+  ["Seller’s guide", "/sellers-guide"],
   ["About Butchi", "/about"],
   ["Market insights", "/blog"],
   ["Contact", "/contact"],
@@ -88,7 +91,7 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <div className="mb-4 text-[12px] font-bold uppercase tracking-[0.16em] text-champagne">YALA ecosystem</div>
+            <div className="mb-4 text-[12px] font-bold uppercase tracking-[0.16em] text-champagne">Under one roof</div>
             <ul className="m-0 flex list-none flex-col p-0 text-[14.5px] font-medium">
               <li>
                 <Link href="/" className="list-link text-white">
@@ -96,13 +99,18 @@ export function SiteFooter() {
                 </Link>
               </li>
               <li>
-                <a href="#" className="list-link text-white/[0.85] hover:text-white">
-                  YALA Mortgage <span className="ml-1.5 text-[10px] font-semibold tracking-[0.1em] text-champagne">SOON</span>
-                </a>
+                <Link href="/property-management" className="list-link text-white/[0.85] hover:text-white">
+                  YALA Property Management
+                </Link>
               </li>
               <li>
-                <a href="#" className="list-link text-white/[0.85] hover:text-white">
-                  YALA Property Management <span className="ml-1.5 text-[10px] font-semibold tracking-[0.1em] text-champagne">SOON</span>
+                <Link href="/pre-approval" className="list-link text-white/[0.85] hover:text-white">
+                  Pre-approval with C2 Financial
+                </Link>
+              </li>
+              <li>
+                <a href={EXT.showingNew} target="_blank" rel="noopener" className="list-link text-white/[0.85] hover:text-white">
+                  New home search ↗<span className="sr-only"> (opens in a new tab)</span>
                 </a>
               </li>
               <li className="mt-2">
@@ -121,7 +129,7 @@ export function SiteFooter() {
           <div>
             <div className="mb-4 text-[12px] font-bold uppercase tracking-[0.16em] text-champagne">Market brief</div>
             <p className="mb-3.5 mt-0 text-[14px] leading-[1.6] text-white/[0.78]">
-              One email a month: Orange County prices, inventory, and the listings worth watching.
+              One email a month: Southern California prices, inventory, and the listings worth watching.
             </p>
             <NewsletterForm source="footer-newsletter" layout="stack" />
           </div>
@@ -134,9 +142,9 @@ export function SiteFooter() {
             <ComplianceLogo type="realtor" label="REALTOR®" />
             <ComplianceLogo type="mls" label="CRMLS Multiple Listing Service" />
             <p className="m-0 max-w-[640px] text-[12px] leading-[1.6] text-white/[0.65]">
-              Butchi Reddy Yalamuri · CA DRE #00000000 · YALA Realty &amp; Associates, CA DRE #00000000. Equal Housing Opportunity.
-              Listing data provided by CRMLS; information deemed reliable but not guaranteed and should be independently verified. IDX
-              display placeholder for Phase 2.
+              {SITE.brokerage} · CA DRE# {SITE.brokerageDre}. {SITE.agentName}, Real Estate Broker · CA DRE# {SITE.agentDre} · NMLS#{" "}
+              {SITE.agentNmls}; mortgage services through C2 Financial. Equal Housing Opportunity. Listing data provided by CRMLS; information
+              deemed reliable but not guaranteed and should be independently verified. New-construction search courtesy of ShowingNew.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-[18px] text-[12.5px] font-medium">

@@ -11,9 +11,6 @@ import { useLeadForm } from "@/lib/leads";
 interface Props {
   listings: Listing[];
   initialSort: ListingSort;
-  location: string;
-  status: "sale" | "rent";
-  resultCount: number;
 }
 
 const PIN_POS: Array<[number, number]> = [[36, 26], [58, 20], [22, 48], [70, 52], [46, 62], [30, 74], [64, 78], [50, 40]];
@@ -29,7 +26,7 @@ const SORT_OPTIONS: Array<[ListingSort, string]> = [
  * Results grid + map. The map is one element: a sticky right aside ≥1000px and
  * a full-width block above the results below that (via `order`).
  */
-export function ListingsResults({ listings, initialSort, location, status, resultCount }: Props) {
+export function ListingsResults({ listings, initialSort }: Props) {
   const id = useId();
   const [sort, setSort] = useState<ListingSort>(initialSort);
   const [view, setView] = useState<"list" | "map">("map");
@@ -43,7 +40,7 @@ export function ListingsResults({ listings, initialSort, location, status, resul
   }));
 
   const isMap = view === "map";
-  const city = location.split(",")[0].trim();
+  const counties = new Set(listings.map((l) => l.county).filter(Boolean)).size;
 
   return (
     <div className="container-1400 flex flex-wrap items-start gap-6 pb-[72px] pt-5">
@@ -73,10 +70,10 @@ export function ListingsResults({ listings, initialSort, location, status, resul
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <div>
             <h1 className="m-0 font-serif text-[26px] font-medium leading-[1.2] tracking-[-0.01em]">
-              Homes for {status === "rent" ? "rent" : "sale"} in {location}
+              Featured homes across Southern California
             </h1>
             <div className="mt-1 text-[13.5px] font-medium text-meta">
-              {num(resultCount)} homes · 3+ beds, 2+ baths · updated 4 min ago from CRMLS
+              {num(listings.length)} featured homes in {counties} counties · use the search bar above for every new-construction community
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-2">
@@ -121,7 +118,7 @@ export function ListingsResults({ listings, initialSort, location, status, resul
           {list.slice(0, 3).map((item, i) => (
             <ListingCard key={item.mls} item={item} priority={i < 2} />
           ))}
-          <AlertsCard city={city} />
+          <AlertsCard />
           {list.slice(3).map((item) => (
             <ListingCard key={item.mls} item={item} />
           ))}
@@ -139,13 +136,13 @@ export function ListingsResults({ listings, initialSort, location, status, resul
   );
 }
 
-function AlertsCard({ city }: { city: string }) {
+function AlertsCard() {
   const id = useId();
-  const { onSubmit, sending, sent, error } = useLeadForm("listings-alerts", () => ({ city }));
+  const { onSubmit, sending, sent, error } = useLeadForm("listings-alerts");
   return (
     <div className="flex min-h-[320px] flex-col justify-center gap-3 rounded-[14px] bg-navy p-7 text-white">
       <div className="eyebrow-light">Property alerts</div>
-      <div className="font-serif text-[24px] font-medium leading-[1.2]">Get new {city} listings the minute they hit CRMLS.</div>
+      <div className="font-serif text-[24px] font-medium leading-[1.2]">Get new Southern California listings the minute they hit the market.</div>
       <p className="m-0 text-[14px] leading-[1.55] text-white/80">Save this search and choose instant, daily, or weekly emails.</p>
       {sent ? (
         <p role="status" className="m-0 mt-1.5 rounded-lg bg-white/10 px-4 py-3 text-[14px] font-semibold text-champagne">

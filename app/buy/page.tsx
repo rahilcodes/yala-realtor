@@ -1,56 +1,37 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getNeighborhoods } from "@/lib/data";
 import { Photo } from "@/components/Photo";
 import { Steps } from "@/components/Steps";
+import { Icon } from "@/components/Icon";
 import { BuyConsultForm } from "@/components/buy/BuyConsultForm";
+import { COUNTY_GUIDES, SOCAL_INTRO } from "@/lib/socal";
+import { newHomesHref } from "@/lib/newHomeSearch";
+import { LINKS, STATS } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Buy a home in Orange County",
-  description: "Buyer representation from pre-approval to keys, with early access to listings before they hit the portals.",
+  title: "Buy a home in Southern California",
+  description:
+    "Buyer representation across Los Angeles, Orange, Riverside, San Bernardino, and San Diego counties, from pre-approval with C2 Financial to keys.",
 };
 
 const STEPS = [
   ["1", "Consultation", "A 30-minute call to map budget, must-haves, neighborhoods, and timing."],
-  ["2", "Pre-approval", "Coordinated with YALA Mortgage or your lender so offers are ready on day one."],
-  ["3", "Search & alerts", "A saved MLS search with instant alerts, plus off-market and coming-soon homes."],
+  ["2", "Pre-approval", "Coordinated with C2 Financial or your lender so offers are ready on day one."],
+  ["3", "Search & alerts", "A saved MLS search with instant alerts, plus new-construction, off-market, and coming-soon homes."],
   ["4", "Tour & offer", "Private showings, a comp-based pricing model, and a negotiated offer strategy."],
   ["5", "Escrow to keys", "Inspections, appraisal, contingencies, and closing, managed end to end."],
 ].map(([n, t, d]) => ({ n, t, d }));
 
-const RESOURCES = [
-  {
-    eyebrow: "Free download",
-    title: "The Orange County Buyer's Guide (2026)",
-    body: "28 pages: costs to expect, offer strategy, HOA and Mello-Roos checklists, inspection red flags.",
-    cta: "Get the guide →",
-    surface: "border-ivory-border bg-ivory hover:border-gold",
-  },
-  {
-    eyebrow: "Financing",
-    title: "Pre-approval in 24 hours with YALA Mortgage",
-    body: "Jumbo, conventional, FHA, and buydown options, coordinated with your offer so you can move fast.",
-    cta: "Start pre-approval →",
-    surface: "border-line bg-cloud hover:border-navy",
-  },
-  {
-    eyebrow: "First-time buyers",
-    title: "CalHFA and down-payment assistance programs",
-    body: "What you may qualify for in Orange County, and how it changes your offer.",
-    cta: "See programs →",
-    surface: "border-line bg-cloud hover:border-navy",
-  },
-];
+const ext = { target: "_blank", rel: "noopener" } as const;
 
-export default async function BuyPage() {
-  const hoods = await getNeighborhoods();
+export default function BuyPage() {
   return (
     <>
       <section className="bg-gradient-to-b from-cloud to-white">
         <div className="container-1200 grid grid-cols-[repeat(auto-fit,minmax(min(100%,400px),1fr))] items-center gap-10 pb-14 pt-16">
           <div>
             <div className="eyebrow">For buyers</div>
-            <h1 className="h-display mt-3.5 text-balance">Buying in Orange County, step by step, with a broker who answers.</h1>
+            <h1 className="h-display mt-3.5 text-balance">Buying in Southern California, step by step, with a broker who answers.</h1>
             <p className="mt-[18px] max-w-[540px] text-[17px] leading-[1.6] text-slate-2">
               From pre-approval to keys, Butchi represents you personally: no hand-offs to a junior agent, no pressure, and early access to
               homes before they hit the portals.
@@ -59,19 +40,19 @@ export default async function BuyPage() {
               <a href="#consult" className="btn-gold px-6">
                 Book a buyer consultation
               </a>
-              <Link href="/listings" className="btn-outline h-[52px] rounded-[10px] px-[22px] text-[15px]">
-                Search MLS listings
-              </Link>
+              <a href={newHomesHref()} {...ext} className="btn-outline h-[52px] rounded-[10px] px-[22px] text-[15px]">
+                Search new homes ↗<span className="sr-only"> (opens in a new tab)</span>
+              </a>
             </div>
             <dl className="mt-9 flex flex-wrap gap-7">
               {[
-                ["450+", "Closed transactions"],
-                ["18 yrs", "In the CA market"],
-                ["4.9★", "212 client reviews"],
+                [STATS.transactions, "Closed transactions"],
+                [`${STATS.years} yrs`, "In the market"],
+                [`${STATS.rating.replace(".0", "")}★`, `${STATS.reviews} client reviews`],
               ].map(([v, l]) => (
-                <div key={l}>
-                  <dd className="m-0 font-serif text-[30px] font-medium leading-none">{v}</dd>
+                <div key={l} className="flex flex-col-reverse">
                   <dt className="mt-1.5 text-[12px] font-semibold uppercase tracking-[0.1em] text-meta">{l}</dt>
+                  <dd className="m-0 font-serif text-[30px] font-medium leading-none">{v}</dd>
                 </div>
               ))}
             </dl>
@@ -98,51 +79,139 @@ export default async function BuyPage() {
         <Steps steps={STEPS} />
       </section>
 
-      <section className="container-1200 pt-20">
-        <div className="section-head">
-          <div>
+      {/* NEIGHBORHOOD GUIDES: Southern California introduction */}
+      <section className="mt-20 bg-ivory" aria-labelledby="socal-intro">
+        <div className="container-1200 py-[72px]">
+          <div className="max-w-[720px]">
             <div className="eyebrow">Neighborhood guides</div>
-            <h2 className="h2 mt-2.5">Where our buyers are looking</h2>
+            <h2 id="socal-intro" className="h2 mt-2.5">
+              Why Southern California
+            </h2>
+            <p className="mt-3 text-[16px] leading-[1.6] text-slate-2">
+              Sunshine, coastline, mountains, and one of the strongest economies in the world, all within a day&apos;s drive.
+            </p>
           </div>
-          <Link href="/listings" className="text-link">
-            Browse all areas
-          </Link>
+          <div className="mt-9 grid grid-cols-[repeat(auto-fit,minmax(min(100%,330px),1fr))] gap-5">
+            {SOCAL_INTRO.map((s, i) => {
+              const accent = i === SOCAL_INTRO.length - 1;
+              return (
+              <article
+                key={s.title}
+                className={`flex flex-col gap-3 rounded-2xl p-7 ${accent ? "bg-navy text-white lg:col-span-2" : "border border-ivory-border bg-white"}`}
+              >
+                <span className={`flex h-11 w-11 items-center justify-center rounded-full ${accent ? "bg-white/10 text-champagne" : "bg-navy text-champagne"}`}>
+                  <Icon name={s.icon} className="h-[22px] w-[22px]" />
+                </span>
+                <h3 className={`m-0 font-serif text-[22px] font-medium leading-[1.2] ${accent ? "text-white" : "text-navy"}`}>{s.title}</h3>
+                <p className={`m-0 text-[15px] leading-[1.65] ${accent ? "max-w-[620px] text-white/80" : "text-slate-2"}`}>{s.body}</p>
+                {accent && (
+                  <div className="mt-2 flex flex-wrap gap-2.5">
+                    <a href={newHomesHref()} {...ext} className="btn focus-white h-12 rounded-[10px] bg-gold px-5 text-[14.5px] font-extrabold text-navy hover:bg-gold-hover">
+                      Search SoCal new homes ↗<span className="sr-only"> (opens in a new tab)</span>
+                    </a>
+                    <a href="#consult" className="btn h-12 rounded-[10px] border-[1.5px] border-white/30 px-5 text-[14.5px] font-bold text-white hover:border-white">
+                      Talk to Butchi
+                    </a>
+                  </div>
+                )}
+                {s.points && (
+                  <ul className="m-0 mt-1 flex list-none flex-col gap-2 p-0 text-[14.5px] leading-[1.55] text-slate">
+                    {s.points.map(([k, v]) => (
+                      <li key={k} className="flex gap-2.5">
+                        <span aria-hidden="true" className="mt-[9px] h-1.5 w-1.5 flex-none rounded-full bg-gold" />
+                        <span>
+                          <strong className="font-bold text-navy">{k}:</strong> {v}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </article>
+              );
+            })}
+          </div>
         </div>
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,250px),1fr))] gap-5">
-          {hoods.map((h) => (
-            <Link
-              key={h.name}
-              href={`/listings?q=${encodeURIComponent(h.name)}`}
-              className="flex flex-col overflow-hidden rounded-[14px] border border-border bg-white text-navy no-underline transition-shadow hover:shadow-card-hover"
-            >
-              <Photo label={h.photo} className="aspect-[4/3]" sizes="(max-width: 700px) 100vw, 300px" />
-              <div className="flex flex-col gap-2 px-[18px] pb-[18px] pt-4">
-                <h3 className="m-0 font-serif text-[22px] font-medium">{h.name}</h3>
-                <div className="flex gap-3.5 text-[13px] font-semibold text-slate">
-                  <span>
-                    Median <strong className="font-extrabold">{h.median}</strong>
-                  </span>
-                  <span>
-                    DOM <strong className="font-extrabold">{h.dom}</strong>
-                  </span>
+      </section>
+
+      {/* WHERE OUR BUYERS ARE LOOKING: five counties */}
+      <section className="container-1200 pt-20" aria-labelledby="counties">
+        <div className="section-head">
+          <div className="max-w-[640px]">
+            <div className="eyebrow">Where our buyers are looking</div>
+            <h2 id="counties" className="h2 mt-2.5">
+              Five counties, one trusted team
+            </h2>
+          </div>
+          <a href={newHomesHref()} {...ext} className="text-link">
+            Browse all new homes ↗<span className="sr-only"> (opens in a new tab)</span>
+          </a>
+        </div>
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,340px),1fr))] gap-5">
+          {COUNTY_GUIDES.map((c) => (
+            <article key={c.county} className="flex flex-col gap-3 rounded-2xl border border-border bg-white p-7 transition-shadow hover:shadow-card">
+              <div className="text-[12px] font-bold uppercase tracking-[0.14em] text-gold-deep">{c.tagline}</div>
+              <h3 className="h3 m-0">{c.name}</h3>
+              <p className="m-0 text-[14.5px] leading-[1.65] text-slate-2">{c.body}</p>
+              <div className="mt-auto flex flex-col gap-3 pt-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-[12.5px] font-semibold text-meta">New homes in</span>
+                  {c.places.map((p) => (
+                    <a key={p} href={newHomesHref(p)} {...ext} className="chip min-h-11 text-navy">
+                      {p}
+                      <span className="sr-only"> (opens in a new tab)</span>
+                    </a>
+                  ))}
                 </div>
-                <p className="m-0 text-[13.5px] leading-[1.5] text-slate-2">{h.note}</p>
+                <a href={newHomesHref(c.name)} {...ext} className="btn-outline btn-44 self-start">
+                  Search {c.name} ↗<span className="sr-only"> (opens in a new tab)</span>
+                </a>
               </div>
-            </Link>
+            </article>
           ))}
         </div>
       </section>
 
-      <section className="container-1200 pt-20">
+      <section className="container-1200 pt-20" aria-label="Buyer resources">
         <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-5">
-          {RESOURCES.map((r) => (
-            <a key={r.title} href="#" className={`flex flex-col gap-2.5 rounded-2xl border p-7 text-navy no-underline transition-colors ${r.surface}`}>
-              <div className="eyebrow">{r.eyebrow}</div>
-              <h3 className="h3 m-0">{r.title}</h3>
-              <p className="m-0 text-[14.5px] leading-[1.55] text-slate-2">{r.body}</p>
-              <span className="mt-auto text-[14px] font-bold">{r.cta}</span>
-            </a>
-          ))}
+          <Link
+            href="/contact?role=Buyer&topic=buyers-guide"
+            className="flex flex-col gap-2.5 rounded-2xl border border-ivory-border bg-ivory p-7 text-navy no-underline transition-colors hover:border-gold"
+          >
+            <div className="eyebrow">Free download</div>
+            <h3 className="h3 m-0">The Southern California Buyer&apos;s Guide</h3>
+            <p className="m-0 text-[14.5px] leading-[1.55] text-slate-2">
+              Costs to expect, offer strategy, HOA and Mello-Roos checklists, and inspection red flags. Request your copy and we&apos;ll
+              email it to you.
+            </p>
+            <span className="mt-auto text-[14px] font-bold">Request the guide →</span>
+          </Link>
+          <Link
+            href="/pre-approval"
+            className="flex flex-col gap-2.5 rounded-2xl border border-line bg-cloud p-7 text-navy no-underline transition-colors hover:border-navy"
+          >
+            <div className="eyebrow">Financing</div>
+            <h3 className="h3 m-0">Pre-approval in 24 hours with C2 Financial</h3>
+            <p className="m-0 text-[14.5px] leading-[1.55] text-slate-2">
+              Contact Butchi Yalamuri, mortgage consultant with C2 Financial. Jumbo, conventional, FHA, and buydown options, coordinated
+              with your offer so you can move fast.
+            </p>
+            <span className="mt-auto text-[14px] font-bold">Start pre-approval →</span>
+          </Link>
+          <a
+            href={LINKS.calhfa}
+            {...ext}
+            className="flex flex-col gap-2.5 rounded-2xl border border-line bg-cloud p-7 text-navy no-underline transition-colors hover:border-navy"
+          >
+            <div className="eyebrow">First-time buyers</div>
+            <h3 className="h3 m-0">CalHFA and down-payment assistance programs</h3>
+            <p className="m-0 text-[14.5px] leading-[1.55] text-slate-2">
+              The California Housing Finance Agency offers first-mortgage and down-payment assistance programs for first-time buyers. Ask
+              Butchi how they could change your offer.
+            </p>
+            <span className="mt-auto text-[14px] font-bold">
+              Visit calhfa.ca.gov ↗<span className="sr-only"> (opens in a new tab)</span>
+            </span>
+          </a>
         </div>
       </section>
 

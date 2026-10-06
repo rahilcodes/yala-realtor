@@ -5,7 +5,7 @@ import { NewsletterForm } from "@/components/NewsletterForm";
 
 export const metadata: Metadata = {
   title: "Market insights",
-  description: "Orange County pricing, neighborhoods, and the practical side of buying and selling, written by Butchi.",
+  description: "Southern California pricing, neighborhoods, and the practical side of buying and selling, written by Butchi.",
 };
 
 export default async function BlogPage() {
@@ -24,7 +24,7 @@ export default async function BlogPage() {
           <div>
             <div className="eyebrow-light">Monthly market brief</div>
             <h2 className="mt-3 font-serif font-medium leading-[1.15] tracking-[-0.02em]" style={{ fontSize: "clamp(26px, 3vw, 34px)" }}>
-              The Orange County numbers, once a month, in one email.
+              The Southern California numbers, once a month, in one email.
             </h2>
             <p className="mt-3 text-[15px] leading-[1.6] text-white/80">
               Median prices by city, days on market, inventory, and the three listings Butchi is watching. No fluff, unsubscribe anytime.

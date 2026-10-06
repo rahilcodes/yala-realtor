@@ -4,10 +4,17 @@ interface Step {
   d: string;
 }
 
-/** Numbered process steps (Buy / Sell pages). */
-export function Steps({ steps }: { steps: Step[] }) {
+/**
+ * Numbered process steps (Buy / Sell pages).
+ * `wide` uses a 300px column minimum so six steps lay out 3 × 2 instead of 5 + 1.
+ */
+export function Steps({ steps, wide = steps.length % 5 !== 0 }: { steps: Step[]; wide?: boolean }) {
   return (
-    <ol className="m-0 mt-8 grid list-none grid-cols-[repeat(auto-fit,minmax(min(100%,210px),1fr))] gap-4 p-0">
+    <ol
+      className={`m-0 mt-8 grid list-none gap-4 p-0 ${
+        wide ? "grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))]" : "grid-cols-[repeat(auto-fit,minmax(min(100%,210px),1fr))]"
+      }`}
+    >
       {steps.map((s) => (
         <li key={s.n} className="flex flex-col gap-2.5 rounded-[14px] border border-border p-6">
           <div aria-hidden="true" className="flex h-9 w-9 items-center justify-center rounded-full bg-navy font-serif text-[17px] font-medium text-champagne">

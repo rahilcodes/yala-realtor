@@ -28,7 +28,7 @@ export function BlogIndex({ posts, categories }: Props) {
             Market insights
           </h1>
           <p className="mt-3.5 text-[17px] leading-[1.6] text-slate-2">
-            Orange County pricing, neighborhoods, and the practical side of buying and selling, written by Butchi.
+            Southern California pricing, neighborhoods, and the practical side of buying and selling, written by Butchi.
           </p>
         </div>
         <div role="group" aria-label="Filter by category" className="flex flex-wrap gap-2">

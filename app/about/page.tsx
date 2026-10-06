@@ -2,44 +2,67 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Photo } from "@/components/Photo";
 import { Wordmark } from "@/components/Wordmark";
+import { Icon, type IconName } from "@/components/Icon";
+import { SITE, STATS } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "About Butchi Reddy Yalamuri",
-  description: "Broker & Principal of YALA Realty & Associates. 450+ Orange County transactions since 2008.",
+  title: `About ${SITE.agentName}`,
+  description: `${SITE.agentTitle}, CA DRE# ${SITE.agentDre}, NMLS# ${SITE.agentNmls}. A full-time Realtor serving Southern California for more than 10 years.`,
 };
 
-const STATS = [
-  ["450+", "Transactions closed"],
-  ["$620M", "Total sales volume"],
-  ["18", "Years in the CA market"],
-  ["4.9 ★", "212 verified reviews"],
+const STATS_ROW = [
+  [STATS.transactions, "Transactions closed"],
+  [STATS.volume, "Career sales volume"],
+  [STATS.years, "Years in the market"],
+  [`${STATS.rating.replace(".0", "")} ★`, `${STATS.reviews} client reviews`],
 ];
 
 const CREDS = [
-  ["California Real Estate Broker License", "DRE #00000000"],
-  ["REALTOR®, National Association of REALTORS®", "Since 2008"],
-  ["Orange County REALTORS® member", "Active"],
-  ["CRMLS participant (IDX/RETS)", "Active"],
-  ["Certified Luxury Home Marketing Specialist (CLHMS)", "Placeholder"],
-  ["Seniors Real Estate Specialist (SRES)", "Placeholder"],
+  ["California Real Estate Broker License", `DRE# ${SITE.agentDre}`],
+  ["Mortgage Loan Originator, multi-state", `NMLS# ${SITE.agentNmls}`],
+  [SITE.brokerage, `DRE# ${SITE.brokerageDre}`],
+  ["Orange County REALTORS® (OCAR)", "Member"],
+  ["California Association of REALTORS® (C.A.R.)", "Member"],
+  ["National Association of REALTORS® (NAR)", "Member"],
 ];
 
-const PRESS = ["OC Register", "Zillow Premier Agent", "RealTrends top agent", "Irvine Chamber", "Google 4.9★", "Yelp"];
+const BACKGROUND: Array<{ icon: IconName; title: string; body: string }> = [
+  {
+    icon: "briefcase",
+    title: "Engineer by training",
+    body: "Dual master's degrees in civil engineering and computer science from India.",
+  },
+  {
+    icon: "wrench",
+    title: "15 years in construction",
+    body: "Residential planning and construction in India before moving to the U.S., giving him a practical eye for condition, value, and potential.",
+  },
+  {
+    icon: "users",
+    title: "Community volunteer",
+    body: "Past President of the Telugu Association of Southern California (TASC), supporting beach cleanups, food donations, and cultural events.",
+  },
+  {
+    icon: "home",
+    title: "20+ years in SoCal",
+    body: "Lives in Irvine and enjoys its parks, plus walking, hiking, beach walks, and weekend trips to the mountains and desert with his family.",
+  },
+];
 
 const TEAM = [
-  { n: "Associate Agent", r: "Buyer showings & tours", d: "DRE #00000000" },
-  { n: "Transaction Coordinator", r: "Escrow, disclosures, timelines", d: "Placeholder" },
-  { n: "Marketing Lead", r: "Listing media & launch campaigns", d: "Placeholder" },
+  { n: "Associate Agent", r: "Buyer showings & tours", d: "Licensed associate" },
+  { n: "Transaction Coordinator", r: "Escrow, disclosures, timelines", d: "Transaction support" },
+  { n: "Marketing Lead", r: "Listing media & launch campaigns", d: "Marketing" },
 ];
 
 export default function AboutPage() {
   return (
     <>
-      <section className="container-1200 grid grid-cols-[repeat(auto-fit,minmax(min(100%,380px),1fr))] items-center gap-12 pt-16">
-        <div className="relative">
+      <section className="container-1200 grid grid-cols-[repeat(auto-fit,minmax(min(100%,380px),1fr))] items-start gap-12 pt-16">
+        <div className="relative nav:sticky nav:top-28">
           <div aria-hidden="true" className="absolute -bottom-5 -right-5 left-5 top-5 rounded-lg border-[1.5px] border-gold" />
           <Photo
-            label="Butchi Reddy Yalamuri, natural light"
+            label={`${SITE.agentName}, natural light`}
             kind="portrait"
             tone="warm"
             src="/images/agent_portrait.jpg"
@@ -50,67 +73,85 @@ export default function AboutPage() {
           />
         </div>
         <div>
-          <div className="eyebrow">About</div>
+          <div className="eyebrow">About · Realtor, Southern California</div>
           <h1 className="h-display mt-3.5 text-balance" style={{ fontSize: "clamp(36px, 4.5vw, 54px)" }}>
-            Butchi Reddy Yalamuri
+            {SITE.agentName}
           </h1>
-          <div className="mt-2.5 text-[15px] font-semibold text-meta">Broker &amp; Principal · YALA Realty &amp; Associates · CA DRE #00000000</div>
-          <p className="mt-[22px] text-[17px] leading-[1.7] text-slate text-pretty">
-            Butchi has represented Orange County buyers and sellers since 2008, closing more than 450 transactions across Irvine, Tustin,
-            Newport Beach, and south county. An engineer by training, he built YALA around one idea: clients deserve the broker, not a
-            hand-off. He runs every pricing model, negotiates every offer, and answers his own phone.
-          </p>
-          <p className="mt-4 text-[17px] leading-[1.7] text-slate text-pretty">
-            YALA Realty is the flagship of a three-company group with YALA Mortgage and YALA Property Management, so financing, purchase,
-            and long-term ownership can be handled under one roof. Butchi lives in Irvine with his family and has served on the Northwood
-            Pointe HOA board.
-          </p>
-          <div className="mt-7 flex flex-wrap gap-3">
+          <div className="mt-2.5 text-[15px] font-semibold leading-[1.5] text-meta">
+            {SITE.agentTitle} <span aria-hidden="true">|</span> CA DRE# {SITE.agentDre} <span aria-hidden="true">|</span> NMLS# {SITE.agentNmls}
+          </div>
+          <div className="mt-[22px] flex flex-col gap-4 text-[17px] leading-[1.7] text-slate text-pretty">
+            <p className="m-0">
+              Butchi Reddy Yalamuri is a full-time Realtor with more than 10 years of experience helping families, investors, and first-time
+              buyers across Southern California. Having lived in the region for over 20 years, he knows it well, from the vibrant cities of
+              Los Angeles County to the family neighborhoods of Orange County, including Irvine, and the growing markets of the Inland Empire
+              and San Diego County.
+            </p>
+            <p className="m-0">
+              Butchi specializes in residential sales, investment properties, and mortgage services. Clients value his clear, honest approach:
+              realistic pricing, strong negotiation, and no surprises. Whether you&apos;re buying your first condo, selling a longtime family
+              home, or building a rental portfolio, he takes the time to understand your goals and budget before making a recommendation. For
+              Butchi, real estate is a service, not just a business.
+            </p>
+            <p className="m-0">
+              He has guided hundreds of clients through the process, and most of his business now comes from referrals and repeat clients.
+              Butchi holds dual master&apos;s degrees in civil engineering and computer science from India. Before moving to the United
+              States, he spent 15 years in residential planning and construction in India, which gives him a practical eye for property
+              condition, value, and potential. He holds a California DRE license and a multi-state MLO license, and is a member of OCAR, CAR,
+              and NAR.
+            </p>
+            <p className="m-0">
+              Butchi lives in Irvine, a master-planned city, and enjoys its parks and community feel. Outside of real estate, he is an active
+              community volunteer and Past President of the Telugu Association of Southern California (TASC), supporting causes like beach
+              cleanups, food donations, and cultural events. A fan of Southern California&apos;s mild climate, he enjoys walking, hiking,
+              beach walks, and weekend trips to the mountains and desert with his family.
+            </p>
+          </div>
+          <p className="mt-6 font-serif text-[22px] font-medium leading-[1.3] text-navy">Ready to buy, sell, or invest in Southern California? Let&apos;s talk.</p>
+          <div className="mt-5 flex flex-wrap gap-3">
             <Link href="/contact" className="btn-gold px-6">
               Book a consultation
             </Link>
-            <a href="tel:9495221103" className="btn-outline h-[52px] rounded-[10px] px-[22px] text-[15px]">
-              (949) 522-1103
+            <a href={SITE.phoneHref} className="btn-outline h-[52px] rounded-[10px] px-[22px] text-[15px]">
+              {SITE.phone}
             </a>
           </div>
         </div>
       </section>
 
-      <section className="container-1200 mt-[72px]">
+      <section className="container-1200 mt-[72px]" aria-label="Track record">
         <dl className="m-0 grid grid-cols-[repeat(auto-fit,minmax(min(100%,200px),1fr))] gap-4">
-          {STATS.map(([v, l]) => (
-            <div key={l} className="rounded-[14px] bg-navy px-6 py-[26px] text-white">
-              <dd className="m-0 font-serif text-[42px] font-medium leading-none text-champagne">{v}</dd>
+          {STATS_ROW.map(([v, l]) => (
+            <div key={l} className="flex flex-col-reverse rounded-[14px] bg-navy px-6 py-[26px] text-white">
               <dt className="mt-2.5 text-[12.5px] font-semibold uppercase tracking-[0.1em] text-white/75">{l}</dt>
+              <dd className="m-0 font-serif text-[42px] font-medium leading-none text-champagne">{v}</dd>
             </div>
           ))}
         </dl>
-        <div className="mt-2.5 text-[12px] text-meta">Career figures, 2008–2026. Placeholder values pending confirmation.</div>
       </section>
 
-      <section className="container-1200 mt-20 grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-10">
+      <section className="container-1200 mt-20 grid grid-cols-[repeat(auto-fit,minmax(min(100%,340px),1fr))] gap-10">
         <div>
           <div className="eyebrow">Credentials</div>
-          <h2 className="h2-sm mb-5 mt-2.5">Licenses &amp; designations</h2>
+          <h2 className="h2-sm mb-5 mt-2.5">Licenses &amp; memberships</h2>
           <ul className="m-0 flex list-none flex-col p-0">
             {CREDS.map(([t, m]) => (
-              <li key={t} className="flex justify-between gap-4 border-b border-hairline py-3.5 text-[15px] font-medium">
+              <li key={t} className="flex flex-wrap justify-between gap-x-4 gap-y-1 border-b border-hairline py-3.5 text-[15px] font-medium">
                 <span>{t}</span>
-                <span className="whitespace-nowrap text-right text-meta">{m}</span>
+                <span className="text-right font-semibold text-gold-deep">{m}</span>
               </li>
             ))}
           </ul>
         </div>
         <div>
-          <div className="eyebrow">Press &amp; awards</div>
-          <h2 className="h2-sm mb-5 mt-2.5">Recognition</h2>
-          <ul className="m-0 grid list-none grid-cols-[repeat(auto-fill,minmax(140px,1fr))] gap-3 p-0">
-            {PRESS.map((p) => (
-              <li
-                key={p}
-                className="flex h-[84px] items-center justify-center rounded-[10px] border border-border bg-cloud p-2.5 text-center font-mono text-[10.5px] uppercase leading-[1.4] tracking-[0.04em] text-meta"
-              >
-                [ logo: {p} ]
+          <div className="eyebrow">Background</div>
+          <h2 className="h2-sm mb-5 mt-2.5">Experience &amp; community</h2>
+          <ul className="m-0 grid list-none grid-cols-[repeat(auto-fit,minmax(min(100%,220px),1fr))] gap-3 p-0">
+            {BACKGROUND.map((b) => (
+              <li key={b.title} className="flex flex-col gap-2 rounded-[14px] border border-border bg-cloud p-5">
+                <Icon name={b.icon} className="h-6 w-6 text-gold-deep" />
+                <span className="text-[15px] font-bold">{b.title}</span>
+                <span className="text-[13.5px] leading-[1.55] text-slate-2">{b.body}</span>
               </li>
             ))}
           </ul>
@@ -144,24 +185,34 @@ export default function AboutPage() {
 
       <section className="container-1200 pb-[88px] pt-20">
         <div className="max-w-[640px]">
-          <div className="eyebrow">The YALA group</div>
+          <div className="eyebrow">The YALA Advantage</div>
           <h2 className="h2 mt-2.5">Buy, finance, and manage under one roof</h2>
         </div>
         <div className="mt-8 grid grid-cols-[repeat(auto-fit,minmax(min(100%,280px),1fr))] gap-5">
-          <Link href="/" className="flex flex-col gap-2.5 rounded-2xl bg-navy p-[30px] text-white no-underline">
+          <Link href="/advantage" className="flex flex-col gap-2.5 rounded-2xl bg-navy p-[30px] text-white no-underline hover:text-white">
             <Wordmark onDark size="card" href={null} />
-            <p className="m-0 mt-3 text-[14.5px] leading-[1.55] text-white/[0.82]">Residential and luxury sales across Orange County. You are here.</p>
+            <p className="m-0 mt-3 text-[14.5px] leading-[1.55] text-white/[0.82]">
+              Residential sales, investment properties, and new construction across Southern California. You are here.
+            </p>
           </Link>
-          <a href="#" className="flex flex-col gap-2.5 rounded-2xl border border-border bg-white p-[30px] text-navy no-underline transition-colors hover:border-navy">
-            <Wordmark descriptor="Mortgage" size="card" href={null} />
-            <p className="m-0 mt-3 text-[14.5px] leading-[1.55] text-slate-2">Pre-approvals, jumbo and conventional loans, rate buydowns. Launching soon.</p>
-          </a>
-          <a href="#" className="flex flex-col gap-2.5 rounded-2xl border border-border bg-white p-[30px] text-navy no-underline transition-colors hover:border-navy">
+          <Link href="/pre-approval" className="flex flex-col gap-2.5 rounded-2xl border border-border bg-white p-[30px] text-navy no-underline transition-colors hover:border-navy">
+            <div className="flex flex-col leading-none">
+              <span className="font-sans text-[22px] font-extrabold tracking-[-0.01em]">C2 Financial</span>
+              <span className="mt-[6px] text-[9.5px] font-bold uppercase tracking-[0.3em] text-gold-deep">Mortgage guidance</span>
+            </div>
+            <p className="m-0 mt-3 text-[14.5px] leading-[1.55] text-slate-2">
+              Pre-approval in 24 hours with Butchi as your mortgage consultant. NMLS# {SITE.agentNmls}.
+            </p>
+          </Link>
+          <Link
+            href="/property-management"
+            className="flex flex-col gap-2.5 rounded-2xl border border-border bg-white p-[30px] text-navy no-underline transition-colors hover:border-navy"
+          >
             <Wordmark descriptor="Property Management" size="card" href={null} />
             <p className="m-0 mt-3 text-[14.5px] leading-[1.55] text-slate-2">
-              Leasing, tenant screening, and full-service management for Orange County owners. Launching soon.
+              Leasing, tenant screening, maintenance, and upgrades for Southern California rental owners.
             </p>
-          </a>
+          </Link>
         </div>
       </section>
     </>

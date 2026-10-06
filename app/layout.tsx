@@ -28,11 +28,11 @@ const cormorant = Cormorant_Garamond({
 
 export const metadata: Metadata = {
   title: {
-    default: "YALA Realty & Associates · Orange County homes",
+    default: "YALA Realty & Associates · Southern California homes",
     template: "%s · YALA Realty & Associates",
   },
   description:
-    "Search every Orange County MLS listing in real time, get a written home valuation, and work directly with broker Butchi Reddy Yalamuri.",
+    "Find your next home in Southern California. New-home search across LA, Orange, Riverside, San Bernardino, and San Diego counties, written home valuations, and a full-time broker, Butchi Reddy Yalamuri.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

@@ -16,8 +16,11 @@ import type {
   Post,
   PostCategory,
   PropertyType,
+  RecentSale,
+  SoCalCounty,
   Testimonial,
 } from "@/types/listing";
+import { SITE, STATS } from "@/lib/site";
 import { money, num } from "@/lib/format";
 import { sortListings } from "@/lib/sort";
 
@@ -34,6 +37,13 @@ const BADGE: Record<BadgeKind, [string, string]> = {
 };
 
 type Extra = Partial<Pick<Listing, "year" | "hoa" | "garage" | "pool" | "listPrice" | "over">>;
+
+/** City → county for the sample data. Phase 2 reads RESO CountyOrParish instead. */
+const CITY_COUNTY: Record<string, SoCalCounty> = {
+  Irvine: "Orange", "Newport Beach": "Orange", Tustin: "Orange", "Laguna Niguel": "Orange", "Costa Mesa": "Orange",
+  "Newport Coast": "Orange", "Lake Forest": "Orange", "San Clemente": "Orange", Pasadena: "Los Angeles", Temecula: "Riverside",
+  "Rancho Cucamonga": "San Bernardino", Chino: "San Bernardino", Carlsbad: "San Diego",
+};
 
 function L(
   id: number,
@@ -64,6 +74,7 @@ function L(
     address,
     city,
     zip,
+    county: CITY_COUNTY[city] ?? "Orange",
     beds,
     baths,
     sqft,
@@ -102,12 +113,17 @@ const listings: Listing[] = [
   L(10, "OC24184880", 1675000, "26 Bell Chime", "Irvine", "92618", 4, 3, 2380, 4100, "Single Family", "Portola Springs", 12, "Pending", "pending", "great room, open plan", { year: 2015, hoa: 190, garage: 2, pool: "Community" }, "/images/sell_hero.jpg"),
   L(11, "OC24185961", 1299000, "25181 Rivendell Dr", "Lake Forest", "92630", 4, 3, 2210, 6000, "Single Family", "Lake Forest Keys", 9, "9 days", "days", "backyard, lake access", { year: 1979, hoa: 140, garage: 2, pool: "Community" }, "/images/lakefront_exterior.jpg"),
   L(12, "OC24185300", 1725000, "27 Via Cancion", "San Clemente", "92673", 4, 3, 2760, 6500, "Single Family", "Talega", 14, "14 days", "days", "spanish exterior, canyon view", { year: 2003, hoa: 265, garage: 3, pool: "Community" }, "/images/two_story_dusk.jpg"),
+  L(13, "PF26041872", 1689000, "1844 Rosewood Ave", "Pasadena", "91104", 4, 3, 2280, 6400, "Single Family", "Bungalow Heaven", 1, "New · Today", "new", "craftsman exterior, front porch", { year: 1922, hoa: 0, garage: 2, pool: "None" }, "/images/two_story_dusk.jpg"),
+  L(14, "SW26038814", 849000, "31455 Black Oak Ln", "Temecula", "92591", 5, 3, 3150, 7800, "Single Family", "Wolf Creek", 0, "Coming Soon", "soon", "two-story exterior, vineyard hills", { year: 2005, hoa: 92, garage: 3, pool: "Community" }, "/images/modern_farmhouse.jpg"),
+  L(15, "CV26040215", 925000, "6542 Sycamore Ridge Ct", "Rancho Cucamonga", "91739", 4, 3, 2640, 6000, "Single Family", "Etiwanda", 1, "New · 1 day", "new", "mountain-view backyard", { year: 2012, hoa: 110, garage: 3, pool: "None" }, "/images/lakefront_exterior.jpg"),
+  L(16, "NDP2609112", 2195000, "7310 Avenida Encinas", "Carlsbad", "92011", 4, 3.5, 2980, 7200, "Single Family", "Aviara", 2, "Open Sun 1–4", "open", "coastal exterior, ocean breeze", { year: 1999, hoa: 175, garage: 3, pool: "Community" }, "/images/coastal_estate.jpg"),
 ];
 
-const sold: Listing[] = [
-  L(101, "OC24170211", 2410000, "41 Cezanne", "Irvine", "92603", 4, 4, 3050, 7200, "Single Family", "Turtle Rock", 8, "Sold · 8 days", "sold", "hillside exterior", { listPrice: money(2295000), over: "+5.0% over list" }, "/images/two_story_dusk.jpg"),
-  L(102, "OC24168903", 1180000, "19 Lakepines", "Irvine", "92620", 3, 2.5, 1620, 0, "Condo", "Woodbridge", 6, "Sold · 6 days", "sold", "lake view balcony", { listPrice: money(1099000), over: "+7.4% over list" }, "/images/lakefront_exterior.jpg"),
-  L(103, "NP24165578", 3650000, "1521 Santiago Dr", "Newport Beach", "92660", 4, 3.5, 3210, 8900, "Single Family", "Dover Shores", 21, "Sold · 21 days", "sold", "bay-view living room", { listPrice: money(3695000), over: "98.8% of list" }, "/images/ocean_terrace.jpg"),
+/** 2026 closed sales where Butchi represented the buyer (client-supplied OneHome links, Rev1). */
+const recentSales: RecentSale[] = [
+  { address: "113 Apron", city: "Irvine", zip: "92618", soldPrice: 3980000, listPrice: 3980000, type: "Single Family Residence", beds: 5, baths: 5, sqft: 3671, mls: "OC26068423", side: "Represented buyer", url: "https://portal.onehome.com/en-US/share/3022425v38372" },
+  { address: "16671 Terra Seca Avenue", city: "Chino", zip: "91708", soldPrice: 1169857, listPrice: 1199857, type: "Single Family Residence", beds: 5, baths: 5, sqft: 3533, mls: "OC26002242", side: "Represented buyer", url: "https://portal.onehome.com/en-US/share/3022430j30636" },
+  { address: "689 Beacon", city: "Irvine", zip: "92618", soldPrice: 1699990, listPrice: 1899990, type: "Condominium", beds: 4, baths: 3, sqft: 2323, mls: "IG26004967", side: "Represented buyer", url: "https://portal.onehome.com/en-US/share/3022433Y24338" },
 ];
 
 const market: MarketStat[] = [
@@ -156,15 +172,15 @@ const neighborhoods: Neighborhood[] = [
 ];
 
 export const agent: Agent = {
-  name: "Butchi Reddy Yalamuri",
-  title: "Broker & Principal",
-  brokerage: "YALA Realty & Associates",
-  dre: "DRE #00000000",
-  rating: "4.9",
-  reviews: 212,
-  phone: "(949) 522-1103",
-  phoneHref: "tel:9495221103",
-  email: "butchi@yalarealty.com",
+  name: SITE.agentName,
+  title: SITE.agentTitle,
+  brokerage: SITE.brokerage,
+  dre: `DRE# ${SITE.agentDre}`,
+  rating: STATS.rating,
+  reviews: STATS.reviews,
+  phone: SITE.phone,
+  phoneHref: SITE.phoneHref,
+  email: SITE.email,
   photoSrc: "/images/agent_portrait.jpg",
 };
 
@@ -196,7 +212,7 @@ const details: Record<string, Omit<ListingDetail, keyof Listing>> = {
       { date: "Apr 2, 2017", event: "Listed for sale", price: "$899,000", src: "CRMLS" },
     ],
     openHouse: { label: "Sat Sep 12 · 1–4 PM · Sun Sep 13 · 1–4 PM" },
-    breadcrumb: ["Orange County", "Irvine", "Northwood Pointe"],
+    breadcrumb: ["Southern California", "Orange County", "Irvine", "Northwood Pointe"],
     agent,
   },
 };
@@ -216,7 +232,7 @@ function genericDetail(l: Listing): Omit<ListingDetail, keyof Listing> {
     schools: [],
     schoolNote: "School data arrives with the Phase 2 feed.",
     history: [{ date: "2026", event: "Listed for sale", price: l.priceFmt, src: `CRMLS #${l.mls}` }],
-    breadcrumb: ["Orange County", l.city, l.neighborhood],
+    breadcrumb: ["Southern California", `${l.county} County`, l.city, l.neighborhood],
     agent,
   };
 }
@@ -240,6 +256,27 @@ export async function getListings(q: ListingsQuery = {}): Promise<Listing[]> {
   return q.limit ? out.slice(0, q.limit) : out;
 }
 
+const COUNTY_ORDER: SoCalCounty[] = ["Orange", "Los Angeles", "Riverside", "San Bernardino", "San Diego"];
+
+/**
+ * Featured mix for the home page: the newest listing from each of the five counties first,
+ * then the next-newest overall, so every county is represented.
+ */
+export async function getFeaturedListings(limit = 6): Promise<Listing[]> {
+  await wait();
+  const byNewest = sortListings(listings, "new");
+  const picks: Listing[] = [];
+  for (const c of COUNTY_ORDER) {
+    const first = byNewest.find((l) => l.county === c);
+    if (first) picks.push(first);
+  }
+  for (const l of byNewest) {
+    if (picks.length >= limit) break;
+    if (!picks.includes(l)) picks.push(l);
+  }
+  return picks.slice(0, limit);
+}
+
 export async function getListing(mls: string): Promise<ListingDetail | null> {
   await wait();
   const l = listings.find((x) => x.mls.toLowerCase() === mls.toLowerCase());
@@ -254,9 +291,9 @@ export async function getSimilarListings(mls: string, limit = 4): Promise<Listin
   return listings.filter((x) => x.city === l.city && x.mls !== mls).slice(0, limit);
 }
 
-export async function getSoldListings(): Promise<Listing[]> {
+export async function getRecentSales(): Promise<RecentSale[]> {
   await wait();
-  return sold;
+  return recentSales;
 }
 
 export async function getMarketStats(): Promise<MarketStat[]> {

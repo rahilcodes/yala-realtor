@@ -3,49 +3,40 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useId, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
+import { LINKS } from "@/lib/site";
+import { PlaceSuggestions } from "@/components/search/PlaceSuggestions";
 
-const TABS = ["Buy", "Rent", "Sell", "Home Value"] as const;
+const TABS = ["New Homes", "Move-in Ready", "Sell", "Home Value"] as const;
 type Tab = (typeof TABS)[number];
 
-const PRICE = ["Price: Any", "Under $1M", "$1M – $2M", "$2M – $4M", "$4M+"];
-const BEDS = ["Beds: Any", "2+", "3+", "4+", "5+"];
-const BATHS = ["Baths: Any", "2+", "3+", "4+"];
+export const PRICE_OPTIONS = ["Price: Any", "Under $750K", "$750K – $1M", "$1M – $1.5M", "$1.5M – $2.5M", "$2.5M+"];
+export const BED_OPTIONS = ["Beds: Any", "2+", "3+", "4+", "5+"];
+export const BATH_OPTIONS = ["Baths: Any", "2+", "3+", "4+"];
 
 /**
- * Hero search. Buy/Rent show location + filters and route to /listings;
- * Sell / Home Value swap the field to an address and route to /sell#valuation.
+ * Hero search.
+ * New Homes / Move-in Ready: a plain GET form to /new-homes (works without JS), which resolves the
+ * location and redirects to Butchi's ShowingNew results with filters applied, in a new tab.
+ * Sell / Home Value: address field that routes to the on-site valuation form.
  */
 export function HeroSearch() {
-  const [tab, setTab] = useState<Tab>("Buy");
+  const [tab, setTab] = useState<Tab>("New Homes");
   const router = useRouter();
   const id = useId();
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
-  const isSearch = tab === "Buy" || tab === "Rent";
-  const placeholder = isSearch ? "Irvine, CA · or neighborhood, ZIP, address, MLS #" : "Enter your home address";
-  const moreLabel = isSearch ? "More filters · Home type, sqft, lot, HOA" : "Or talk to Butchi first";
-  const moreHref = isSearch ? "/listings" : "/contact";
-  const ctaLabel = isSearch ? "Search homes" : tab === "Sell" ? "Start my listing plan" : "Get my home value";
+  const isSearch = tab === "New Homes" || tab === "Move-in Ready";
+  const placeholder = isSearch ? "City, ZIP, county, or community" : "Enter your home address";
+  const ctaLabel = isSearch ? "Search new homes" : tab === "Sell" ? "Start my listing plan" : "Get my home value";
 
   function onSubmit(e: FormEvent<HTMLFormElement>) {
+    if (isSearch) return; // native GET to /new-homes in a new tab
     e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    const q = String(fd.get("q") ?? "").trim();
-    if (isSearch) {
-      const params = new URLSearchParams();
-      if (q) params.set("q", q);
-      params.set("status", tab === "Rent" ? "rent" : "sale");
-      for (const key of ["price", "beds", "baths"]) {
-        const v = String(fd.get(key) ?? "");
-        if (v && !/Any$/.test(v)) params.set(key, v);
-      }
-      router.push(`/listings?${params.toString()}`);
-    } else {
-      const params = new URLSearchParams();
-      if (q) params.set("address", q);
-      params.set("intent", tab === "Sell" ? "sell" : "value");
-      router.push(`/sell?${params.toString()}#valuation`);
-    }
+    const q = String(new FormData(e.currentTarget).get("q") ?? "").trim();
+    const params = new URLSearchParams();
+    if (q) params.set("address", q);
+    params.set("intent", tab === "Sell" ? "sell" : "value");
+    router.push(`/sell?${params.toString()}#valuation`);
   }
 
   // Roving tabindex + arrow keys for the tablist.
@@ -61,11 +52,15 @@ export function HeroSearch() {
   return (
     <form
       onSubmit={onSubmit}
+      action={isSearch ? "/new-homes" : undefined}
+      method="get"
+      target={isSearch ? "_blank" : undefined}
+      rel={isSearch ? "noopener" : undefined}
       role="search"
       aria-label="Search homes"
       className="hero-form max-w-[620px] overflow-hidden rounded-[14px] border border-border bg-white shadow-card"
     >
-      <div role="tablist" aria-label="Search type" className="flex flex-wrap gap-0.5 border-b border-hairline px-2 pt-2">
+      <div role="tablist" aria-label="Search type" className="grid grid-cols-2 gap-0.5 border-b border-hairline px-2 pt-2 min-[440px]:flex min-[440px]:flex-wrap">
         {TABS.map((t, i) => {
           const selected = t === tab;
           return (
@@ -82,7 +77,7 @@ export function HeroSearch() {
               tabIndex={selected ? 0 : -1}
               onClick={() => setTab(t)}
               onKeyDown={(e) => onTabKey(e, i)}
-              className={`hero-tab focus-inset min-h-11 cursor-pointer whitespace-nowrap rounded-md border-0 border-b-2 bg-transparent px-4 text-[14px] font-bold transition-colors ${
+              className={`hero-tab focus-inset min-h-11 cursor-pointer whitespace-nowrap rounded-md border-0 border-b-2 bg-transparent px-[clamp(10px,1.3vw,16px)] text-[14px] font-bold transition-colors ${
                 selected ? "border-navy text-navy" : "border-transparent text-meta hover:text-navy"
               }`}
               style={{ borderRadius: "6px 6px 0 0" }}
@@ -93,8 +88,9 @@ export function HeroSearch() {
         })}
       </div>
       <div id={`${id}-panel`} role="tabpanel" aria-labelledby={`${id}-tab-${TABS.indexOf(tab)}`} className="hero-form-body">
+        {isSearch && <input type="hidden" name="status" value={tab === "Move-in Ready" ? "move-in" : "all"} />}
         <label htmlFor={`${id}-q`} className="sr-only">
-          {isSearch ? "Location" : "Property address"}
+          {isSearch ? "City, ZIP code, county, or community" : "Property address"}
         </label>
         <div className="hero-field flex items-center gap-3 rounded-[10px] border-[1.5px] border-border-input bg-white px-4 transition-colors focus-within:border-navy">
           <span aria-hidden="true" className="h-[18px] w-[18px] flex-none rounded-full border-2 border-navy" />
@@ -103,24 +99,29 @@ export function HeroSearch() {
             name="q"
             type="text"
             placeholder={placeholder}
+            list={isSearch ? `${id}-places` : undefined}
             autoComplete={isSearch ? "off" : "street-address"}
-            className="min-w-0 flex-1 border-0 bg-transparent text-[15.5px] text-navy outline-none placeholder:text-meta focus-visible:outline-none"
+            enterKeyHint="search"
+            className="h-full min-w-0 flex-1 self-stretch border-0 bg-transparent text-[15.5px] text-navy outline-none placeholder:text-meta focus-visible:outline-none"
           />
+          {isSearch && <PlaceSuggestions id={`${id}-places`} />}
         </div>
 
         {isSearch && (
-          <div className="mt-2.5 grid grid-cols-[repeat(auto-fit,minmax(min(100%,140px),1fr))] gap-2.5">
-            {[
-              ["price", "Price", PRICE],
-              ["beds", "Beds", BEDS],
-              ["baths", "Baths", BATHS],
-            ].map(([name, label, opts]) => (
-              <div key={name as string}>
+          <div className="mt-2.5 grid grid-cols-[repeat(auto-fit,minmax(min(100%,118px),1fr))] gap-2.5">
+            {(
+              [
+                ["price", "Price", PRICE_OPTIONS],
+                ["beds", "Bedrooms", BED_OPTIONS],
+                ["baths", "Bathrooms", BATH_OPTIONS],
+              ] as const
+            ).map(([name, label, opts]) => (
+              <div key={name}>
                 <label htmlFor={`${id}-${name}`} className="sr-only">
-                  {label as string}
+                  {label}
                 </label>
-                <select id={`${id}-${name}`} name={name as string} className="select hero-select px-3.5 text-[14px] font-semibold">
-                  {(opts as string[]).map((o) => (
+                <select id={`${id}-${name}`} name={name} className="select hero-select px-3.5 text-[14px] font-semibold">
+                  {opts.map((o) => (
                     <option key={o} value={o}>
                       {o}
                     </option>
@@ -132,11 +133,23 @@ export function HeroSearch() {
         )}
 
         <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-          <Link href={moreHref} className="inline-flex min-h-11 items-center py-2 text-[13.5px] font-semibold text-slate underline underline-offset-[3px]">
-            {moreLabel}
-          </Link>
-          <button type="submit" className="btn-gold hero-cta px-[30px]">
+          {isSearch ? (
+            <a
+              href={LINKS.showingNew}
+              target="_blank"
+              rel="noopener"
+              className="inline-flex min-h-11 items-center py-2 text-[13.5px] font-semibold text-slate underline underline-offset-[3px]"
+            >
+              Browse all SoCal new homes ↗<span className="sr-only"> (opens in a new tab)</span>
+            </a>
+          ) : (
+            <Link href="/contact" className="inline-flex min-h-11 items-center py-2 text-[13.5px] font-semibold text-slate underline underline-offset-[3px]">
+              Or talk to Butchi first
+            </Link>
+          )}
+          <button type="submit" className="btn-gold hero-cta px-[30px] max-[440px]:w-full">
             {ctaLabel}
+            {isSearch && <span className="sr-only"> (opens results in a new tab)</span>}
           </button>
         </div>
       </div>

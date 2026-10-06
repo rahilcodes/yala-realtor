@@ -11,10 +11,18 @@ export const metadata: Metadata = {
 
 const ROLES: Role[] = ["Buyer", "Seller", "Both", "Other"];
 
+/** ?topic= values used by links elsewhere on the site to pre-fill the message. */
+const TOPICS: Record<string, string> = {
+  "buyers-guide": "Please email me the Southern California Buyer’s Guide.",
+  upgrades: "I’d like help planning upgrades or repairs on my property.",
+};
+
 export default async function ContactPage({ searchParams }: PageProps<"/contact">) {
   const sp = await searchParams;
   const roleParam = (Array.isArray(sp.role) ? sp.role[0] : sp.role) ?? "";
   const role: Role = ROLES.includes(roleParam as Role) ? (roleParam as Role) : "Buyer";
+  const topicParam = (Array.isArray(sp.topic) ? sp.topic[0] : sp.topic) ?? "";
+  const initialMessage = TOPICS[topicParam];
   const today = todayISO();
 
   return (
@@ -30,7 +38,7 @@ export default async function ContactPage({ searchParams }: PageProps<"/contact"
       </div>
 
       <div className="mt-10 grid grid-cols-[repeat(auto-fit,minmax(min(100%,380px),1fr))] items-start gap-8">
-        <ContactForm initialRole={role} />
+        <ContactForm initialRole={role} initialMessage={initialMessage} />
 
         <div className="flex flex-col gap-5">
           <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,200px),1fr))] gap-[22px] rounded-[18px] border border-border p-[26px]">

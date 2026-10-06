@@ -16,10 +16,10 @@ const PLACEHOLDER: Record<Role, string> = {
 };
 
 /** Contact form with "I am a…" role segments that change the message placeholder. */
-export function ContactForm({ initialRole = "Buyer" }: { initialRole?: Role }) {
+export function ContactForm({ initialRole = "Buyer", initialMessage }: { initialRole?: Role; initialMessage?: string }) {
   const id = useId();
   const [role, setRole] = useState<Role>(initialRole);
-  const { onSubmit, sending, sent, error } = useLeadForm("contact", () => ({ role }));
+  const { onSubmit, sending, sent, error } = useLeadForm("contact", () => ({ role, topic: initialMessage ? "prefilled" : undefined }));
 
   return (
     <form
@@ -59,11 +59,11 @@ export function ContactForm({ initialRole = "Buyer" }: { initialRole?: Role }) {
       </label>
       <label htmlFor={`${id}-msg`} className="field">
         How can we help?
-        <textarea id={`${id}-msg`} name="message" rows={5} placeholder={PLACEHOLDER[role]} className="textarea" />
+        <textarea id={`${id}-msg`} name="message" rows={5} placeholder={PLACEHOLDER[role]} defaultValue={initialMessage} className="textarea" />
       </label>
       <label className="flex items-start gap-2.5 text-[13px] font-medium leading-[1.5] text-slate-2">
         <input type="checkbox" name="marketBrief" value="yes" className="checkbox mt-0.5" />
-        Send me the monthly Orange County market brief (optional)
+        Send me the monthly Southern California market brief (optional)
       </label>
       <button type="submit" disabled={sending} className="btn-primary btn-54 rounded-[10px] text-[15px] font-extrabold disabled:opacity-70">
         {sending ? "Sending…" : "Send message"}

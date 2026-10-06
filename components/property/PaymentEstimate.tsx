@@ -58,8 +58,8 @@ export function PaymentEstimate({ price, hoa, rate = 6.1 }: Props) {
         />
       </div>
       <div className="mt-4 flex flex-wrap gap-2.5">
-        <a href="#" className="btn-primary h-[46px]">
-          Get pre-approved with YALA Mortgage
+        <a href="/pre-approval" className="btn-primary h-[46px]">
+          Get pre-approved with C2 Financial
         </a>
         <span className="self-center text-[12.5px] font-medium text-meta">Estimate only. Not a commitment to lend.</span>
       </div>

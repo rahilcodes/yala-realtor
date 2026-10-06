@@ -14,6 +14,8 @@ export type ListingStatus = "Active" | "Pending" | "Coming Soon" | "Sold";
 
 export type PropertyType = "Single Family" | "Condo" | "Townhouse" | "Multi-family";
 
+export type SoCalCounty = "Orange" | "Los Angeles" | "Riverside" | "San Bernardino" | "San Diego";
+
 export interface Listing {
   id: number;
   /** MLS listing id (RESO ListingId). */
@@ -24,6 +26,8 @@ export interface Listing {
   address: string;
   city: string;
   zip: string;
+  /** County (RESO CountyOrParish). */
+  county: SoCalCounty;
   beds: number;
   baths: number;
   sqft: number;
@@ -143,3 +147,20 @@ export interface Neighborhood {
 }
 
 export type ListingSort = "new" | "asc" | "desc" | "sqft";
+
+/** A closed sale where YALA represented a client (shown on the Sell page). */
+export interface RecentSale {
+  address: string;
+  city: string;
+  zip: string;
+  soldPrice: number;
+  listPrice: number;
+  type: string;
+  beds: number;
+  baths: number;
+  sqft: number;
+  mls: string;
+  side: "Represented buyer" | "Represented seller";
+  /** Public OneHome share link with the full MLS record. */
+  url: string;
+}

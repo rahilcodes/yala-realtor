@@ -4,20 +4,20 @@ import { ListingCard } from "@/components/ListingCard";
 import { MapPanel } from "@/components/MapPanel";
 import { Photo } from "@/components/Photo";
 import { ValuationForm } from "@/components/ValuationForm";
-import { getListings, getMarketStats, getPosts, getTestimonials, LIVE_LISTING_COUNT } from "@/lib/data";
-import { num } from "@/lib/format";
+import { getFeaturedListings, getMarketStats, getPosts, getTestimonials } from "@/lib/data";
+import { newHomesHref } from "@/lib/newHomeSearch";
+import { STATS } from "@/lib/site";
 
-const POPULAR = ["Irvine", "Newport Beach", "Tustin Ranch", "Laguna Niguel", "Great Park"];
+const POPULAR = ["Orange County", "Los Angeles", "San Diego", "Inland Empire", "Irvine"];
 
 export default async function HomePage() {
   const [featured, market, testimonials, posts] = await Promise.all([
-    getListings({ limit: 6 }),
+    getFeaturedListings(6),
     getMarketStats(),
     getTestimonials(),
     getPosts(),
   ]);
   const hero = featured[0];
-  const liveCount = num(LIVE_LISTING_COUNT);
 
   return (
     <>
@@ -27,21 +27,22 @@ export default async function HomePage() {
           <div>
             <div className="inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-line bg-white py-1.5 pl-2 pr-3 text-[12px] font-semibold text-slate">
               <span aria-hidden="true" className="inline-block h-2 w-2 flex-none rounded-full bg-success" />
-              {liveCount} live listings · Orange County
+              Live new-home search · 5 SoCal counties
             </div>
             <h1 className="hero-title font-serif font-medium leading-[1.06] tracking-[-0.02em] text-navy text-balance">
-              Find your next home in Orange County.
+              Find your next home in Southern California.
             </h1>
             <p className="hero-lede max-w-[520px] leading-[1.55] text-slate-2">
-              Search every MLS listing in real time, save searches, and get alerts the minute something new hits the market.
+              Search new homes across Los Angeles, Orange, Riverside, San Bernardino, and San Diego counties, with a broker who answers.
             </p>
             <HeroSearch />
             <div className="hero-popular flex flex-wrap items-center gap-2 text-[13px] font-semibold text-meta">
               Popular:
               {POPULAR.map((p) => (
-                <Link key={p} href={`/listings?q=${encodeURIComponent(p)}`} className="chip text-navy">
+                <a key={p} href={newHomesHref(p)} target="_blank" rel="noopener" className="chip text-navy">
                   {p}
-                </Link>
+                  <span className="sr-only"> new homes (opens in a new tab)</span>
+                </a>
               ))}
             </div>
           </div>
@@ -52,7 +53,7 @@ export default async function HomePage() {
             className="hero-map relative block overflow-hidden rounded-2xl no-underline"
           >
             <MapPanel
-              label="interactive map · IDX pins · Irvine"
+              label="interactive map · Southern California"
               className="h-full min-h-[inherit]"
               pins={[
                 { label: "$1.85M", x: "38%", y: "30%" },
@@ -92,10 +93,10 @@ export default async function HomePage() {
         <div className="section-head">
           <div>
             <div className="eyebrow">Featured listings</div>
-            <h2 className="h2 mt-2.5">New this week in Orange County</h2>
+            <h2 className="h2 mt-2.5">New this week across Southern California</h2>
           </div>
           <Link href="/listings" className="btn-outline btn-44">
-            View all {liveCount} listings →
+            View all featured homes →
           </Link>
         </div>
         <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,300px),1fr))] gap-[22px]">
@@ -132,7 +133,7 @@ export default async function HomePage() {
         <div className="section-head">
           <div>
             <div className="eyebrow">Market pulse</div>
-            <h2 className="h2 mt-2.5">Orange County, August 2026</h2>
+            <h2 className="h2 mt-2.5">Southern California, September 2026</h2>
           </div>
           <Link href="/blog" className="text-link">
             Read the full monthly report
@@ -147,7 +148,7 @@ export default async function HomePage() {
             </div>
           ))}
         </div>
-        <div className="mt-3 text-[12px] text-meta">Source: CRMLS, single-family and condo, Orange County. Placeholder figures until Phase 2 feed.</div>
+        <div className="mt-3 text-[12px] text-meta">Source: CRMLS, single-family and condo. Placeholder figures until the MLS data feed is connected.</div>
       </section>
 
       {/* TESTIMONIALS */}
@@ -163,7 +164,7 @@ export default async function HomePage() {
                 ★★★★★
               </span>
               <span className="sr-only">Five stars.</span>
-              4.9 · 212 reviews on Google &amp; Zillow
+              {STATS.rating} · {STATS.reviews} client reviews
             </div>
           </div>
           <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-5">

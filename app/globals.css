@@ -45,6 +45,8 @@
   --shadow-btn: 0 4px 14px rgba(11, 31, 58, 0.2);
 
   --breakpoint-nav: 1000px;
+  /* Full desktop menu (8 links + 2 buttons) needs ~1150px of content width. */
+  --breakpoint-menu: 1200px;
 
   --ease-out-soft: cubic-bezier(0.2, 0.7, 0.2, 1);
 }
@@ -287,20 +289,21 @@
    with viewport height (vh) between a mobile floor and the design's max.
    --------------------------------------------------------------------------- */
 .hero {
-  --hero-pt: clamp(20px, 3.5vh, 56px);
-  --hero-pb: clamp(16px, 2.8vh, 48px);
+  --hero-pt: clamp(16px, 3vh, 56px);
+  --hero-pb: clamp(14px, 2.4vh, 48px);
   --hero-gap: clamp(12px, 2vh, 22px);
   --hero-field: clamp(46px, 5.4vh, 54px);
   --hero-select: clamp(44px, 5vh, 50px);
   --hero-cta: clamp(46px, 5.2vh, 52px);
-  --hero-title: clamp(36px, min(4.8vw, 7vh), 60px);
+  --hero-title: clamp(36px, min(4.8vw, 6.8vh), 60px);
   --hero-lede: clamp(15px, 1.7vh, 17px);
   padding-block: var(--hero-pt) var(--hero-pb);
 }
 @media (min-width: 1000px) {
   .hero {
     /* Fill exactly one screen below the 76px nav; contents are sized to fit inside it. */
-    min-height: calc(100svh - 76px);
+    /* One screen below the utility bar (36px + 1px border) and the sticky nav (76px + 1px border). */
+    min-height: calc(100svh - 114px);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -360,7 +363,7 @@
   margin-top: clamp(10px, 1.8vh, 18px);
 }
 .hero-form {
-  margin-top: clamp(14px, 2.6vh, 32px);
+  margin-top: clamp(14px, 2.2vh, 32px);
 }
 .hero-form-body {
   padding: clamp(12px, 1.8vh, 18px);

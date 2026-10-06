@@ -2,7 +2,7 @@
 
 Next.js (App Router) + TypeScript + Tailwind v4 build of the design handoff in
 `design_handoff_yala_realty/` (the `.dc.html` files are the visual reference; nothing from
-`support.js` is used at runtime).
+`support.js` is used at runtime). Content follows the client's "Yala Realty website Updates Rev1".
 
 ```bash
 npm install
@@ -15,34 +15,62 @@ npm run lint
 
 | Route | Notes |
 | --- | --- |
-| `/` | Hero search (Buy / Rent / Sell / Home Value tabs), featured listings, valuation CTA, market pulse, testimonials, blog teasers |
-| `/listings` | Sticky filter bar, sort, List/Map toggle (map is a sticky aside ≥1000px, a full-width block above results below), save search, alerts card, IDX disclaimer |
-| `/listings/[mls]` | Property page. Sample: `/listings/OC24188214` (78 Winding Way). Gallery, save/share, Schedule tour / Ask question form with day picker + date input and pre-filled editable message, facts, schools, price history, payment estimate with down-payment slider, similar homes |
-| `/buy` | Buyer path, neighborhood guides, consultation form (`#consult`) |
-| `/sell` | Valuation form (`#valuation`, pre-fills `?address=`), pillars, recent sales, process, seller consultation |
-| `/about` | Broker bio, stats, credentials, team, YALA group |
-| `/contact` | Role segments (Buyer / Seller / Both / Other, `?role=`), message form, 30-minute scheduler with day + time slots |
+| `/` | "Find your next home in Southern California." Hero search (New Homes / Move-in Ready / Sell / Home Value), featured homes from all five counties, valuation CTA, market pulse, testimonials, blog teasers |
+| `/listings` | Featured homes with sort and List/Map toggle. The sticky search bar sends location + filters to the new-home search |
+| `/listings/[mls]` | Property page. Sample: `/listings/OC24188214` (78 Winding Way) |
+| `/buy` | Buyer path, Southern California introduction, five county guides with one-click new-home searches, C2 Financial pre-approval, CalHFA link, consultation form (`#consult`) |
+| `/sell` | Valuation form (`#valuation`, pre-fills `?address=`), $260M volume, 2026 buyer-side sales (OneHome links), six-step process, Seller's Guide download |
+| `/sellers-guide` | Web version of "The Ultimate Southern California Home Seller's Guide" + PDF download (`public/guides/socal-sellers-guide.pdf`) |
+| `/advantage` | The YALA Advantage |
+| `/pre-approval` | Pre-approval contact page (C2 Financial, Butchi NMLS# 1922285) |
+| `/property-management` | YALA Property Management services + owner inquiry form |
+| `/about` | Bio, title line, licenses (DRE / NMLS), memberships, background |
+| `/contact` | Role segments (`?role=`), message pre-fill (`?topic=buyers-guide` / `upgrades`), scheduler |
 | `/blog` | Category filter with featured card, newsletter |
+| `GET /new-homes` | New-home search redirect (see below) |
 | `POST /api/leads` | Lead intake stub. Every form posts here with `source` and the originating `page`. |
+
+## New-home search (ShowingNew)
+
+Every search box on the site is a plain GET form to `/new-homes` that opens in a new tab. The route
+resolves the query and 302s to Butchi's ShowingNew site (`https://www.showingnew.com/butchi`) with filters applied:
+
+| Query | Destination |
+| --- | --- |
+| City or neighborhood (`Irvine`, `Great Park`, `Otay Ranch`) | `/communities/california/{market}/city-{slug}`; falls back to the county page when ShowingNew lists zero communities for that city (count cached 6 h) |
+| County / region (`Orange County`, `LA County`, `Inland Empire`) | County or market results page |
+| ZIP (`92618`) | `/postalcode-{zip}` directly (ShowingNew's own resolver 404s on bare ZIPs) |
+| Anything else (community, builder, school district) | ShowingNew's own resolver, `redirecttoresultspage?SearchText=…` |
+| Empty | Butchi's ShowingNew home page |
+
+Filters carried over: `price` → `pricelow`/`pricehigh`, `beds` → `bedrooms`, `baths` → `bathrooms`, `status=move-in` → `homestatus=A`.
+Inspect any resolution with `/new-homes?q=Irvine&beds=3%2B&format=json`. Logic lives in `lib/newHomeSearch.ts`.
+Re-validate the city → market map against the live site with:
+
+```bash
+node --experimental-strip-types scripts/probe-showingnew.mjs
+```
 
 ## Structure
 
-- `types/listing.ts` — `Listing`, `ListingDetail`, `Post`, etc. Field names mirror the handoff's `listings.js` and map 1:1 to RESO/IDX (`ListPrice`, `ListingId`, `BedroomsTotal`, `LivingArea`, `DaysOnMarket`, `StandardStatus`…).
-- `lib/data.ts` — async data layer: `getListings`, `getListing`, `getSimilarListings`, `getSoldListings`, `getMarketStats`, `getTestimonials`, `getPosts`, `getNeighborhoods`, `getAgent`. Phase 2 replaces the bodies with the CRMLS/IDX adapter; pages do not change.
-- `lib/leads.ts` — `submitLead(source, data)` and the `useLeadForm` hook used by every form.
-- `lib/saved.ts` — saved-listing hearts (localStorage-backed, swap for an account store later).
-- `components/` — `SiteNav` (sticky, hamburger below 1000px), `SiteFooter` (compliance row: DRE placeholders, Equal Housing, CRMLS disclaimer), `ListingCard`, `Photo` (next/image over a neutral fill, labeled with the design's photo description), `MapPanel` (map placeholder with price pins), forms per page.
-- `app/globals.css` — design tokens as Tailwind `@theme` (navy, gold, gold-deep, champagne, cloud, ivory…), fonts via `next/font` (Newsreader, Manrope, Cormorant Garamond), component classes (`btn-*`, `input`, `seg`, `tile`, `pill`), and the global 3px gold focus ring.
+- `lib/site.ts` — licenses (brokerage DRE# 02140547, Butchi DRE# 02012703, NMLS# 1922285), track-record stats, contact, external links. Change a number here and it updates everywhere.
+- `lib/newHomeSearch.ts` — ShowingNew URL resolver, SoCal city/county map, filter parsing.
+- `lib/socal.ts` — Southern California introduction and county guides (Rev1 copy).
+- `lib/sellersGuide.ts` — Seller's Guide content (steps, disclosures, local mandates, checklist, escrow timeline).
+- `types/listing.ts` — `Listing` (now with `county`), `RecentSale`, etc. Field names map 1:1 to RESO/IDX.
+- `lib/data.ts` — async data layer: `getListings`, `getFeaturedListings`, `getListing`, `getSimilarListings`, `getRecentSales`, `getMarketStats`, `getTestimonials`, `getPosts`, `getAgent`. Phase 2 replaces the bodies with the CRMLS/IDX adapter.
+- `lib/leads.ts` — `submitLead(source, data)` and the `useLeadForm` hook; `components/forms/LeadForm.tsx` renders labeled lead forms from a field list.
+- `components/SiteNav.tsx` — utility bar (licenses, phone, valuation) + sticky nav with YALA Advantage, New Home Search, and the YALA Property Management button; hamburger below 1200px.
+- `app/globals.css` — design tokens, components, and the hero fit rules (hero fills exactly one screen below the header on desktop).
 
 ## Accessibility notes
 
 - Every input has a label (visible or `sr-only`); toggles use `aria-pressed`, the hero tabs use `role="tablist"` / `aria-selected` with arrow-key navigation.
 - Minimum 44px tap targets; visible 3px gold focus ring (navy ring on gold surfaces).
-- Small gold text on white always uses Gold Deep `#8A6D2F` (5.4:1).
-- All grids use `repeat(auto-fit, minmax(min(100%, Npx), 1fr))`, so pages reflow from 360px to 1440px+ without breakpoints; the only breakpoint is the 1000px nav/aside switch.
+- Links that open a new tab say so to screen readers.
+- All grids use `repeat(auto-fit, minmax(min(100%, Npx), 1fr))`.
 
-## Swapping in real imagery and the MLS feed
+## Still placeholder
 
-- Pass `src` to `<Photo>` to replace a placeholder; layouts don't change.
-- Replace `lib/data.ts` internals with the CRMLS adapter; keep the field names.
-- `app/api/leads/route.ts` currently logs leads server-side; forward to the CRM there.
+- Featured listings, market-pulse figures, and testimonials are sample data until the MLS feed and real reviews are connected.
+- Footer social and legal links (`#`) need real URLs.
