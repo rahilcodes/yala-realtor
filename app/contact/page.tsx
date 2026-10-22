@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { todayISO } from "@/lib/format";
 import { ContactForm, type Role } from "@/components/contact/ContactForm";
 import { Scheduler } from "@/components/contact/Scheduler";
-import { MapPanel } from "@/components/MapPanel";
+import { MapEmbed } from "@/components/MapEmbed";
+import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Contact Butchi",
@@ -75,16 +76,7 @@ export default async function ContactPage({ searchParams }: PageProps<"/contact"
 
           <Scheduler today={today} />
 
-          <MapPanel label="12 Proclamation Way, Irvine" marker className="h-[260px] rounded-[18px]">
-            <a
-              href="https://maps.google.com/?q=12+Proclamation+Way+Irvine+CA+92602"
-              target="_blank"
-              rel="noreferrer"
-              className="btn absolute bottom-3.5 right-3.5 h-11 rounded-lg bg-white px-3.5 text-[13px] font-bold text-navy shadow-btn hover:bg-cloud"
-            >
-              Get directions
-            </a>
-          </MapPanel>
+          <MapEmbed address={`${SITE.addressLine1}, ${SITE.addressLine2}`} className="h-[280px] rounded-[18px]" />
         </div>
       </div>
     </section>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Icon, type IconName } from "@/components/Icon";
 import { Photo } from "@/components/Photo";
+import { ClampBox } from "@/components/ClampBox";
 import { SITE, STATS } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -81,15 +82,14 @@ export default function AdvantagePage() {
               ))}
             </dl>
           </div>
-          <div className="relative">
-            <div aria-hidden="true" className="absolute -bottom-4 -right-4 left-4 top-4 rounded-2xl border-[1.5px] border-gold" />
+          <div className="mx-auto w-full max-w-[460px] rounded-[18px] border-[1.5px] border-gold p-2.5">
             <Photo
               label={`${SITE.agentName}, natural light`}
               kind="portrait"
               tone="warm"
               src="/images/agent_portrait.jpg"
               labelPosition="none"
-              className="aspect-[4/5] max-h-[560px] rounded-2xl"
+              className="aspect-[4/5] w-full rounded-[10px]"
               priority
               sizes="(max-width: 800px) 100vw, 480px"
             />
@@ -108,13 +108,15 @@ export default function AdvantagePage() {
           {PILLARS.map((p, i) => (
             <li
               key={p.title}
-              className={`flex flex-col gap-3.5 rounded-2xl p-7 ${i === 0 ? "bg-navy text-white lg:col-span-2" : "border border-border bg-white"}`}
+              className={`flex flex-col gap-2.5 rounded-2xl p-7 ${i === 0 ? "bg-navy text-white lg:col-span-2" : "border border-border bg-white"}`}
             >
               <span className={`flex h-11 w-11 items-center justify-center rounded-full ${i === 0 ? "bg-white/10 text-champagne" : "bg-navy text-champagne"}`}>
                 <Icon name={p.icon} className="h-[22px] w-[22px]" />
               </span>
-              <h3 className={`m-0 font-serif text-[23px] font-medium leading-[1.25] ${i === 0 ? "text-white" : "text-navy"}`}>{p.title}</h3>
-              <p className={`m-0 text-[15px] leading-[1.65] ${i === 0 ? "text-white/80" : "text-slate-2"}`}>{p.body}</p>
+              <h3 className={`m-0 font-serif text-[22px] font-medium leading-[1.2] ${i === 0 ? "text-white" : "text-navy"}`}>{p.title}</h3>
+              <ClampBox lines={4} onDark={i === 0}>
+                <p className={`m-0 text-[14.5px] leading-[1.55] ${i === 0 ? "text-white/80" : "text-slate-2"}`}>{p.body}</p>
+              </ClampBox>
             </li>
           ))}
         </ol>

@@ -2,7 +2,7 @@
 
 Next.js (App Router) + TypeScript + Tailwind v4 build of the design handoff in
 `design_handoff_yala_realty/` (the `.dc.html` files are the visual reference; nothing from
-`support.js` is used at runtime). Content follows the client's "Yala Realty website Updates Rev1".
+`support.js` is used at runtime). Content follows the client's revision documents (Rev1, Rev2 Oct 18).
 
 ```bash
 npm install
@@ -15,7 +15,7 @@ npm run lint
 
 | Route | Notes |
 | --- | --- |
-| `/` | "Find your next home in Southern California." Hero search (New Homes / Move-in Ready / Sell / Home Value), featured homes from all five counties, valuation CTA, market pulse, testimonials, blog teasers |
+| `/` | "Find your next home in Southern California." Hero search (New Homes / Move-in Ready / Sell / Home Value) with the builder-registration note, real 2026 sales, valuation CTA, market pulse (C.A.R. monthly report) |
 | `/listings` | Featured homes with sort and List/Map toggle. The sticky search bar sends location + filters to the new-home search |
 | `/listings/[mls]` | Property page. Sample: `/listings/OC24188214` (78 Winding Way) |
 | `/buy` | Buyer path, Southern California introduction, five county guides with one-click new-home searches, C2 Financial pre-approval, CalHFA link, consultation form (`#consult`) |
@@ -24,9 +24,9 @@ npm run lint
 | `/advantage` | The YALA Advantage |
 | `/pre-approval` | Pre-approval contact page (C2 Financial, Butchi NMLS# 1922285) |
 | `/property-management` | YALA Property Management services + owner inquiry form |
-| `/about` | Bio, title line, licenses (DRE / NMLS), memberships, background |
+| `/about` | Bio, title line, licenses (DRE / NMLS), memberships, background, agents (`AGENTS` in `lib/site.ts`) |
 | `/contact` | Role segments (`?role=`), message pre-fill (`?topic=buyers-guide` / `upgrades`), scheduler |
-| `/blog` | Category filter with featured card, newsletter |
+| `/blog` | Hidden from navigation and search engines (Rev2) until it relaunches |
 | `GET /new-homes` | New-home search redirect (see below) |
 | `POST /api/leads` | Lead intake stub. Every form posts here with `source` and the originating `page`. |
 
@@ -70,7 +70,13 @@ node --experimental-strip-types scripts/probe-showingnew.mjs
 - Links that open a new tab say so to screen readers.
 - All grids use `repeat(auto-fit, minmax(min(100%, Npx), 1fr))`.
 
+## Monthly upkeep
+
+- Market pulse: update `market`, `COUNTY_MEDIANS`, and `MARKET_SOURCE` in `lib/data.ts` from the latest C.A.R. "home sales and price report".
+- Agent headshots: add `photo` to each entry in `AGENTS` (`lib/site.ts`).
+
 ## Still placeholder
 
-- Featured listings, market-pulse figures, and testimonials are sample data until the MLS feed and real reviews are connected.
+- The `/listings` page and property pages still use sample listings until the CRMLS feed is connected.
+- Client stories are hidden until real testimonials arrive (`getTestimonials` in `lib/data.ts`).
 - Footer social and legal links (`#`) need real URLs.

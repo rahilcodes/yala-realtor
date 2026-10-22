@@ -126,11 +126,30 @@ const recentSales: RecentSale[] = [
   { address: "689 Beacon", city: "Irvine", zip: "92618", soldPrice: 1699990, listPrice: 1899990, type: "Condominium", beds: 4, baths: 3, sqft: 2323, mls: "IG26004967", side: "Represented buyer", url: "https://portal.onehome.com/en-US/share/3022433Y24338" },
 ];
 
+/**
+ * Market pulse: California Association of REALTORS®, "September home sales and price report"
+ * (released October 2026). Update monthly; Phase 2 can compute these from the CRMLS feed instead.
+ */
+export const MARKET_SOURCE = {
+  label: "California Association of REALTORS®, September 2026 home sales and price report",
+  url: "https://www.car.org/aboutus/mediacenter/newsreleases/2026releases/sept2026sales",
+  period: "September 2026",
+};
+
 const market: MarketStat[] = [
-  { label: "Median sale price", value: "$1.34M", delta: "+3.8% YoY", up: true },
-  { label: "Median days on market", value: "24", delta: "−3 days YoY", up: true },
-  { label: "Active inventory", value: "3,912", delta: "+11% YoY", up: false },
-  { label: "Sale-to-list ratio", value: "99.6%", delta: "+0.4 pts YoY", up: true },
+  { label: "SoCal median sale price", value: "$895K", delta: "+3.0% vs. Sept 2025", up: true },
+  { label: "SoCal sales, year over year", value: "−9.1%", delta: "Flat vs. August (−0.2%)", up: false },
+  { label: "Median days on market (CA)", value: "29", delta: "3 days faster than Sept 2025", up: true },
+  { label: "Sale-to-list price ratio (CA)", value: "98.8%", delta: "+0.6 pts vs. Sept 2025", up: true },
+];
+
+/** September 2026 county medians (same C.A.R. report). */
+export const COUNTY_MEDIANS: Array<{ county: string; median: string; yoy: string }> = [
+  { county: "Los Angeles", median: "$994,670", yoy: "+1.2%" },
+  { county: "Orange", median: "$1,480,000", yoy: "+5.6%" },
+  { county: "Riverside", median: "$620,000", yoy: "−0.6%" },
+  { county: "San Bernardino", median: "$531,090", yoy: "+6.2%" },
+  { county: "San Diego", median: "$1,050,000", yoy: "+6.1%" },
 ];
 
 const testimonials: Testimonial[] = [

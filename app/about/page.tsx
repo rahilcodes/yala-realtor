@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Photo } from "@/components/Photo";
 import { Wordmark } from "@/components/Wordmark";
 import { Icon, type IconName } from "@/components/Icon";
-import { SITE, STATS } from "@/lib/site";
+import { AGENTS, dreLookupUrl, SITE, STATS } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: `About ${SITE.agentName}`,
@@ -49,25 +49,19 @@ const BACKGROUND: Array<{ icon: IconName; title: string; body: string }> = [
   },
 ];
 
-const TEAM = [
-  { n: "Associate Agent", r: "Buyer showings & tours", d: "Licensed associate" },
-  { n: "Transaction Coordinator", r: "Escrow, disclosures, timelines", d: "Transaction support" },
-  { n: "Marketing Lead", r: "Listing media & launch campaigns", d: "Marketing" },
-];
 
 export default function AboutPage() {
   return (
     <>
       <section className="container-1200 grid grid-cols-[repeat(auto-fit,minmax(min(100%,380px),1fr))] items-start gap-12 pt-16">
-        <div className="relative nav:sticky nav:top-28">
-          <div aria-hidden="true" className="absolute -bottom-5 -right-5 left-5 top-5 rounded-lg border-[1.5px] border-gold" />
+        <div className="mx-auto w-full max-w-[500px] rounded-[14px] border-[1.5px] border-gold p-2.5 nav:sticky nav:top-28">
           <Photo
             label={`${SITE.agentName}, natural light`}
             kind="portrait"
             tone="warm"
             src="/images/agent_portrait.jpg"
             labelPosition="none"
-            className="aspect-[4/5] max-h-[600px] rounded-lg"
+            className="aspect-[4/5] w-full rounded-[8px]"
             priority
             sizes="(max-width: 800px) 100vw, 480px"
           />
@@ -158,28 +152,45 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="mt-20 bg-ivory">
+      <section className="mt-20 bg-ivory" aria-labelledby="agents">
         <div className="container-1200 py-[72px]">
           <div className="max-w-[640px]">
             <div className="eyebrow">Team</div>
-            <h2 className="h2 mt-2.5">The associates</h2>
+            <h2 id="agents" className="h2 mt-2.5">
+              Our agents
+            </h2>
             <p className="mt-3 text-[16px] leading-[1.6] text-slate-2">
-              A small team so every client gets the broker. Associates handle showings, transaction coordination, and marketing so Butchi
-              can stay on the phone with you.
+              Licensed YALA Realty &amp; Associates agents working alongside Butchi across Southern California.
             </p>
           </div>
-          <div className="mt-8 grid grid-cols-[repeat(auto-fit,minmax(min(100%,240px),1fr))] gap-5">
-            {TEAM.map((t) => (
-              <div key={t.n} className="overflow-hidden rounded-[14px] border border-ivory-border bg-white">
-                <Photo label="headshot" tone="warm" className="aspect-square" sizes="(max-width: 700px) 100vw, 280px" />
+          <ul className="m-0 mt-8 grid list-none grid-cols-[repeat(auto-fit,minmax(min(100%,190px),1fr))] gap-5 p-0">
+            {AGENTS.map((a) => (
+              <li key={a.dre} className="overflow-hidden rounded-[14px] border border-ivory-border bg-white">
+                {a.photo ? (
+                  <Photo label={a.name} kind="portrait" src={a.photo} labelPosition="none" className="aspect-[4/5]" sizes="(max-width: 700px) 100vw, 240px" />
+                ) : (
+                  <div role="img" aria-label={`Photo of ${a.name} coming soon`} className="flex aspect-[4/5] items-end justify-center bg-sand">
+                    <svg aria-hidden="true" viewBox="0 0 100 100" className="h-[78%] w-[78%] text-white/80" fill="currentColor">
+                      <circle cx="50" cy="36" r="19" />
+                      <path d="M12 100c0-22 17-37 38-37s38 15 38 37Z" />
+                    </svg>
+                  </div>
+                )}
                 <div className="px-[18px] pb-[18px] pt-4">
-                  <div className="text-[16px] font-bold">{t.n}</div>
-                  <div className="mt-[3px] text-[13px] font-medium text-meta">{t.r}</div>
-                  <div className="mt-[3px] text-[12px] font-medium text-gold-deep">{t.d}</div>
+                  <div className="text-[16px] font-bold">{a.name}</div>
+                  <div className="mt-[3px] text-[13px] font-medium text-meta">Realtor®, {SITE.brokerage}</div>
+                  <a
+                    href={dreLookupUrl(a.dre)}
+                    target="_blank"
+                    rel="noopener"
+                    className="mt-1 inline-flex min-h-11 items-center text-[13px] font-semibold text-gold-deep no-underline hover:underline"
+                  >
+                    DRE# {a.dre} ↗<span className="sr-only"> (verify license with the California DRE, opens in a new tab)</span>
+                  </a>
                 </div>
-              </div>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </section>
 

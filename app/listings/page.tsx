@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ListingsResults } from "@/components/listings/ListingsResults";
 import { FilterBar } from "@/components/listings/FilterBar";
+import { NewHomeNote } from "@/components/NewHomeNote";
 import { getListings } from "@/lib/data";
 import type { ListingSort } from "@/types/listing";
 
@@ -23,6 +24,9 @@ export default async function ListingsPage({ searchParams }: PageProps<"/listing
   return (
     <>
       <FilterBar location={q} />
+      <div className="container-1400 pt-4">
+        <NewHomeNote />
+      </div>
       <ListingsResults listings={listings} initialSort={sort} />
     </>
   );

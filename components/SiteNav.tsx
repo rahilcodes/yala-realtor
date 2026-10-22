@@ -15,7 +15,6 @@ const NAV: NavLink[] = [
   { label: "New Home Search", href: EXT.showingNew, external: true },
   { label: "YALA Advantage", href: "/advantage" },
   { label: "About", href: "/about" },
-  { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/contact" },
 ];
 

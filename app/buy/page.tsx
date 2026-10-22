@@ -3,6 +3,8 @@ import Link from "next/link";
 import { Photo } from "@/components/Photo";
 import { Steps } from "@/components/Steps";
 import { Icon } from "@/components/Icon";
+import { ClampBox } from "@/components/ClampBox";
+import { NewHomeNote } from "@/components/NewHomeNote";
 import { BuyConsultForm } from "@/components/buy/BuyConsultForm";
 import { COUNTY_GUIDES, SOCAL_INTRO } from "@/lib/socal";
 import { newHomesHref } from "@/lib/newHomeSearch";
@@ -58,15 +60,17 @@ export default function BuyPage() {
             </dl>
           </div>
           <Photo label="family at front door, keys in hand" src="/images/buy_hero.jpg" labelPosition="none" className="min-h-[420px] rounded-[18px]" priority>
-            <figure className="absolute bottom-5 left-5 right-5 m-0 flex items-center gap-3.5 rounded-xl bg-white px-[18px] py-4 shadow-float">
+            <div className="absolute bottom-5 left-5 right-5 m-0 flex flex-wrap items-center gap-x-3.5 gap-y-1 rounded-xl bg-white px-[18px] py-4 shadow-float">
               <span aria-hidden="true" className="text-[15px] tracking-[2px] text-gold">
                 ★★★★★
               </span>
-              <blockquote className="m-0 font-serif text-[15px] italic leading-[1.45]">
-                “He picked up every single call.”{" "}
-                <cite className="text-[12.5px] font-semibold not-italic text-meta">Priya &amp; Arjun M., Woodbridge</cite>
-              </blockquote>
-            </figure>
+              <span className="font-serif text-[16px] leading-[1.4] text-navy">
+                {STATS.rating} from {STATS.reviews} client reviews
+              </span>
+              <span className="text-[12.5px] font-semibold text-meta">
+                {STATS.transactions} closed transactions · {STATS.years} years
+              </span>
+            </div>
           </Photo>
         </div>
       </section>
@@ -97,13 +101,31 @@ export default function BuyPage() {
               return (
               <article
                 key={s.title}
-                className={`flex flex-col gap-3 rounded-2xl p-7 ${accent ? "bg-navy text-white lg:col-span-2" : "border border-ivory-border bg-white"}`}
+                className={`flex flex-col gap-2.5 rounded-2xl p-7 ${accent ? "bg-navy text-white lg:col-span-2" : "border border-ivory-border bg-white"}`}
               >
-                <span className={`flex h-11 w-11 items-center justify-center rounded-full ${accent ? "bg-white/10 text-champagne" : "bg-navy text-champagne"}`}>
-                  <Icon name={s.icon} className="h-[22px] w-[22px]" />
+                <span className={`flex h-9 w-9 items-center justify-center rounded-full ${accent ? "bg-white/10 text-champagne" : "bg-navy text-champagne"}`}>
+                  <Icon name={s.icon} className="h-[18px] w-[18px]" />
                 </span>
                 <h3 className={`m-0 font-serif text-[22px] font-medium leading-[1.2] ${accent ? "text-white" : "text-navy"}`}>{s.title}</h3>
-                <p className={`m-0 text-[15px] leading-[1.65] ${accent ? "max-w-[620px] text-white/80" : "text-slate-2"}`}>{s.body}</p>
+                {accent ? (
+                  <p className="m-0 max-w-[620px] text-[14.5px] leading-[1.55] text-white/80">{s.body}</p>
+                ) : (
+                  <ClampBox lines={4}>
+                    <p className="m-0 text-[14.5px] leading-[1.55] text-slate-2">{s.body}</p>
+                    {s.points && (
+                      <ul className="m-0 mt-2 flex list-none flex-col gap-1.5 p-0 text-[14px] leading-[1.55] text-slate">
+                        {s.points.map(([k, v]) => (
+                          <li key={k} className="flex gap-2.5">
+                            <span aria-hidden="true" className="mt-[9px] h-1.5 w-1.5 flex-none rounded-full bg-gold" />
+                            <span>
+                              <strong className="font-bold text-navy">{k}:</strong> {v}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </ClampBox>
+                )}
                 {accent && (
                   <div className="mt-2 flex flex-wrap gap-2.5">
                     <a href={newHomesHref()} {...ext} className="btn focus-white h-12 rounded-[10px] bg-gold px-5 text-[14.5px] font-extrabold text-navy hover:bg-gold-hover">
@@ -113,18 +135,6 @@ export default function BuyPage() {
                       Talk to Butchi
                     </a>
                   </div>
-                )}
-                {s.points && (
-                  <ul className="m-0 mt-1 flex list-none flex-col gap-2 p-0 text-[14.5px] leading-[1.55] text-slate">
-                    {s.points.map(([k, v]) => (
-                      <li key={k} className="flex gap-2.5">
-                        <span aria-hidden="true" className="mt-[9px] h-1.5 w-1.5 flex-none rounded-full bg-gold" />
-                        <span>
-                          <strong className="font-bold text-navy">{k}:</strong> {v}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
                 )}
               </article>
               );
@@ -146,24 +156,26 @@ export default function BuyPage() {
             Browse all new homes ↗<span className="sr-only"> (opens in a new tab)</span>
           </a>
         </div>
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,340px),1fr))] gap-5">
+        <NewHomeNote className="mb-6" />
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-5">
           {COUNTY_GUIDES.map((c) => (
-            <article key={c.county} className="flex flex-col gap-3 rounded-2xl border border-border bg-white p-7 transition-shadow hover:shadow-card">
-              <div className="text-[12px] font-bold uppercase tracking-[0.14em] text-gold-deep">{c.tagline}</div>
+            <article key={c.county} className="flex flex-col gap-2.5 rounded-2xl border border-border bg-white p-7 transition-shadow hover:shadow-card">
+              <div className="eyebrow">{c.tagline}</div>
               <h3 className="h3 m-0">{c.name}</h3>
-              <p className="m-0 text-[14.5px] leading-[1.65] text-slate-2">{c.body}</p>
-              <div className="mt-auto flex flex-col gap-3 pt-2">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-[12.5px] font-semibold text-meta">New homes in</span>
+              <ClampBox lines={4}>
+                <p className="m-0 text-[14.5px] leading-[1.55] text-slate-2">{c.body}</p>
+              </ClampBox>
+              <div className="mt-auto flex flex-col gap-1.5 pt-1">
+                <div className="flex flex-wrap items-center gap-1.5" aria-label={`New homes in ${c.name}`} role="group">
                   {c.places.map((p) => (
-                    <a key={p} href={newHomesHref(p)} {...ext} className="chip min-h-11 text-navy">
+                    <a key={p} href={newHomesHref(p)} {...ext} className="chip min-h-11 px-2.5 text-[12.5px] text-navy">
                       {p}
-                      <span className="sr-only"> (opens in a new tab)</span>
+                      <span className="sr-only"> new homes (opens in a new tab)</span>
                     </a>
                   ))}
                 </div>
-                <a href={newHomesHref(c.name)} {...ext} className="btn-outline btn-44 self-start">
-                  Search {c.name} ↗<span className="sr-only"> (opens in a new tab)</span>
+                <a href={newHomesHref(c.name)} {...ext} className="inline-flex min-h-11 items-center self-start text-[14px] font-bold text-navy no-underline hover:underline">
+                  Search all new homes in {c.name} ↗<span className="sr-only"> (opens in a new tab)</span>
                 </a>
               </div>
             </article>

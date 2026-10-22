@@ -10,7 +10,6 @@ const EXPLORE = [
   ["The YALA Advantage", "/advantage"],
   ["Seller’s guide", "/sellers-guide"],
   ["About Butchi", "/about"],
-  ["Market insights", "/blog"],
   ["Contact", "/contact"],
 ] as const;
 

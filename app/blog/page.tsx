@@ -6,6 +6,8 @@ import { NewsletterForm } from "@/components/NewsletterForm";
 export const metadata: Metadata = {
   title: "Market insights",
   description: "Southern California pricing, neighborhoods, and the practical side of buying and selling, written by Butchi.",
+  // Blog is hidden from navigation for now (client Rev2); keep it out of search results until it relaunches.
+  robots: { index: false, follow: false },
 };
 
 export default async function BlogPage() {

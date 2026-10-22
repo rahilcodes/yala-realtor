@@ -1,23 +1,24 @@
 import Link from "next/link";
 import { HeroSearch } from "@/components/home/HeroSearch";
-import { ListingCard } from "@/components/ListingCard";
 import { MapPanel } from "@/components/MapPanel";
-import { Photo } from "@/components/Photo";
+import { RecentSales } from "@/components/RecentSales";
 import { ValuationForm } from "@/components/ValuationForm";
-import { getFeaturedListings, getMarketStats, getPosts, getTestimonials } from "@/lib/data";
+import { COUNTY_MEDIANS, getMarketStats, getRecentSales, MARKET_SOURCE } from "@/lib/data";
+import { money, num } from "@/lib/format";
 import { newHomesHref } from "@/lib/newHomeSearch";
-import { STATS } from "@/lib/site";
 
-const POPULAR = ["Orange County", "Los Angeles", "San Diego", "Inland Empire", "Irvine"];
+/** Quick new-home searches; "" opens all of Southern California. */
+const POPULAR: Array<[string, string]> = [
+  ["All SoCal", ""],
+  ["Orange County", "Orange County"],
+  ["Los Angeles", "Los Angeles"],
+  ["San Diego", "San Diego"],
+  ["Inland Empire", "Inland Empire"],
+];
 
 export default async function HomePage() {
-  const [featured, market, testimonials, posts] = await Promise.all([
-    getFeaturedListings(6),
-    getMarketStats(),
-    getTestimonials(),
-    getPosts(),
-  ]);
-  const hero = featured[0];
+  const [sales, market] = await Promise.all([getRecentSales(), getMarketStats()]);
+  const hero = sales[0];
 
   return (
     <>
@@ -38,72 +39,58 @@ export default async function HomePage() {
             <HeroSearch />
             <div className="hero-popular flex flex-wrap items-center gap-2 text-[13px] font-semibold text-meta">
               Popular:
-              {POPULAR.map((p) => (
-                <a key={p} href={newHomesHref(p)} target="_blank" rel="noopener" className="chip text-navy">
-                  {p}
+              {POPULAR.map(([label, q]) => (
+                <a key={label} href={newHomesHref(q || undefined)} target="_blank" rel="noopener" className="chip text-navy">
+                  {label}
                   <span className="sr-only"> new homes (opens in a new tab)</span>
                 </a>
               ))}
             </div>
           </div>
 
-          <Link
-            href="/listings"
-            aria-label="Open map search"
-            className="hero-map relative block overflow-hidden rounded-2xl no-underline"
-          >
-            <MapPanel
-              label="interactive map · Southern California"
-              className="h-full min-h-[inherit]"
-              pins={[
-                { label: "$1.85M", x: "38%", y: "30%" },
-                { label: "$2.4M", x: "62%", y: "22%" },
-                { label: "$1.295M", x: "24%", y: "52%", highlight: true },
-                { label: "$3.1M", x: "70%", y: "58%" },
-              ]}
-            />
+          <div className="hero-map relative overflow-hidden rounded-2xl">
+            <MapPanel label="Southern California" className="h-full min-h-[inherit]" ariaLabel="Decorative map" />
             {hero && (
-              <div className="absolute bottom-5 left-5 right-5 flex gap-3.5 rounded-xl bg-white p-3 shadow-float">
-                <Photo label={hero.photo} className="min-h-[100px] w-[130px] flex-none rounded-lg" labelPosition="none" sizes="130px">
-                  <span className="badge absolute left-2 top-2 rounded px-[7px] py-[3px] text-[10px]" style={{ background: hero.badgeBg, color: hero.badgeFg }}>
-                    {hero.badge}
-                  </span>
-                </Photo>
-                <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-baseline justify-between gap-2">
-                    <div className="text-[21px] font-extrabold">{hero.priceFmt}</div>
-                    <div className="text-[11px] font-semibold text-meta">MLS# {hero.mls}</div>
-                  </div>
-                  <div className="mt-1 text-[13.5px] font-semibold text-slate">
-                    {hero.specs} · {hero.lotFmt} sqft lot
-                  </div>
-                  <div className="mt-1 text-[13px] text-slate-2">{hero.fullAddress}</div>
-                  <div className="mt-2 text-[11.5px] font-medium text-meta">
-                    {hero.type} · {hero.neighborhood} · Listed by {hero.listedBy}
-                  </div>
+              <a
+                href={hero.url}
+                target="_blank"
+                rel="noopener"
+                className="absolute bottom-5 left-5 right-5 flex flex-col gap-1.5 rounded-xl bg-white p-4 text-navy no-underline shadow-float transition-shadow hover:shadow-card-hover"
+              >
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <span className="badge bg-navy px-[7px] py-[3px] text-[10px] text-white">Recently sold · {hero.side}</span>
+                  <span className="text-[11px] font-semibold text-meta">MLS# {hero.mls}</span>
                 </div>
-              </div>
+                <div className="text-[21px] font-extrabold">{money(hero.soldPrice)}</div>
+                <div className="text-[13.5px] font-semibold text-slate">
+                  {hero.beds} bd · {hero.baths} ba · {num(hero.sqft)} sqft · {hero.type}
+                </div>
+                <div className="text-[13px] text-slate-2">
+                  {hero.address}, {hero.city}, CA {hero.zip}
+                </div>
+                <span className="text-[12.5px] font-bold text-gold-deep">
+                  View on OneHome ↗<span className="sr-only"> (opens in a new tab)</span>
+                </span>
+              </a>
             )}
-          </Link>
+          </div>
         </div>
       </section>
 
-      {/* FEATURED LISTINGS */}
-      <section className="container-1200 pt-[72px]">
+      {/* RECENT SALES (real MLS records) */}
+      <section className="container-1200 pt-[72px]" aria-labelledby="recent-sales">
         <div className="section-head">
           <div>
-            <div className="eyebrow">Featured listings</div>
-            <h2 className="h2 mt-2.5">New this week across Southern California</h2>
+            <div className="eyebrow">Recent sales · represented buyer</div>
+            <h2 id="recent-sales" className="h2 mt-2.5">
+              Closed this year with Butchi
+            </h2>
           </div>
-          <Link href="/listings" className="btn-outline btn-44">
-            View all featured homes →
-          </Link>
+          <a href={newHomesHref()} target="_blank" rel="noopener" className="btn-outline btn-44">
+            Search new homes ↗<span className="sr-only"> (opens in a new tab)</span>
+          </a>
         </div>
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,300px),1fr))] gap-[22px]">
-          {featured.map((item, i) => (
-            <ListingCard key={item.mls} item={item} priority={i < 3} />
-          ))}
-        </div>
+        <RecentSales sales={sales} />
       </section>
 
       {/* VALUATION CTA */}
@@ -128,61 +115,54 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* MARKET STATS */}
-      <section className="container-1200 pt-20">
+      {/* MARKET PULSE (C.A.R. monthly report) */}
+      <section className="container-1200 pt-20" aria-labelledby="market">
         <div className="section-head">
           <div>
             <div className="eyebrow">Market pulse</div>
-            <h2 className="h2 mt-2.5">Southern California, September 2026</h2>
+            <h2 id="market" className="h2 mt-2.5">
+              Southern California, {MARKET_SOURCE.period}
+            </h2>
           </div>
-          <Link href="/blog" className="text-link">
-            Read the full monthly report
-          </Link>
+          <a href={MARKET_SOURCE.url} target="_blank" rel="noopener" className="text-link">
+            Read the full C.A.R. report ↗<span className="sr-only"> (opens in a new tab)</span>
+          </a>
         </div>
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,190px),1fr))] gap-4">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,210px),1fr))] gap-4">
           {market.map((m) => (
-            <div key={m.label} className="rounded-[14px] border border-line bg-cloud px-6 py-[26px]">
+            <div key={m.label} className="rounded-[14px] border border-line bg-cloud px-6 py-[24px]">
               <div className="text-[13px] font-semibold text-meta">{m.label}</div>
-              <div className="mt-2.5 font-serif text-[40px] font-medium leading-none tracking-[-0.02em]">{m.value}</div>
-              <div className="mt-2.5 text-[12.5px] font-bold text-success">{m.delta}</div>
+              <div className="mt-2.5 font-serif text-[38px] font-medium leading-none tracking-[-0.02em]">{m.value}</div>
+              <div className="mt-2.5 text-[12.5px] font-bold text-slate">{m.delta}</div>
             </div>
           ))}
         </div>
-        <div className="mt-3 text-[12px] text-meta">Source: CRMLS, single-family and condo. Placeholder figures until the MLS data feed is connected.</div>
-      </section>
-
-      {/* TESTIMONIALS */}
-      <section className="mt-20 bg-ivory">
-        <div className="container-1200 py-[72px]">
-          <div className="section-head mb-8">
-            <div>
-              <div className="eyebrow">Client stories</div>
-              <h2 className="h2 mt-2.5">Represented personally, start to close</h2>
-            </div>
-            <div className="flex items-center gap-2.5 text-[14px] font-semibold text-slate">
-              <span aria-hidden="true" className="tracking-[2px] text-gold">
-                ★★★★★
-              </span>
-              <span className="sr-only">Five stars.</span>
-              {STATS.rating} · {STATS.reviews} client reviews
-            </div>
+        <div className="mt-4 rounded-[14px] border border-line">
+          <div className="border-b border-line px-5 py-3 text-[12.5px] font-bold uppercase tracking-[0.1em] text-gold-deep">
+            Median sale price by county · {MARKET_SOURCE.period}
           </div>
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-5">
-            {testimonials.map((t) => (
-              <figure key={t.name} className="m-0 flex flex-col gap-5 rounded-2xl border border-ivory-border bg-white px-7 py-[30px]">
-                <blockquote className="m-0 font-serif text-[19px] italic leading-[1.5] text-navy">“{t.quote}”</blockquote>
-                <figcaption className="mt-auto">
-                  <div className="text-[14px] font-bold">{t.name}</div>
-                  <div className="mt-[3px] text-[12.5px] font-medium text-meta">{t.meta}</div>
-                </figcaption>
-              </figure>
+          <dl className="m-0 grid grid-cols-[repeat(auto-fit,minmax(min(100%,180px),1fr))]">
+            {COUNTY_MEDIANS.map((c) => (
+              <div key={c.county} className="flex flex-col-reverse gap-1 border-line px-5 py-4 [&:not(:last-child)]:border-b sm:[&:not(:last-child)]:border-b-0 sm:[&:not(:last-child)]:border-r">
+                <dt className="text-[13px] font-semibold text-meta">
+                  {c.county} County · <span className="text-slate">{c.yoy} YoY</span>
+                </dt>
+                <dd className="m-0 text-[20px] font-extrabold">{c.median}</dd>
+              </div>
             ))}
-          </div>
+          </dl>
+        </div>
+        <div className="mt-3 text-[12px] text-meta">
+          Source:{" "}
+          <a href={MARKET_SOURCE.url} target="_blank" rel="noopener" className="text-meta underline">
+            {MARKET_SOURCE.label}
+          </a>
+          . Existing single-family homes; days on market and sale-to-list ratio are statewide.
         </div>
       </section>
 
       {/* BUYER / SELLER PATHS */}
-      <section className="container-1200 pt-20">
+      <section className="container-1200 pb-[88px] pt-20">
         <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,340px),1fr))] gap-5">
           <Link href="/buy" className="flex flex-col gap-3.5 rounded-[18px] border border-border bg-white p-9 text-navy no-underline transition-shadow hover:shadow-card">
             <div className="eyebrow">For buyers</div>
@@ -203,33 +183,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* BLOG TEASERS */}
-      <section className="container-1200 pb-[88px] pt-20">
-        <div className="section-head">
-          <div>
-            <div className="eyebrow">Market insights</div>
-            <h2 className="h2 mt-2.5">From the blog</h2>
-          </div>
-          <Link href="/blog" className="text-link">
-            All articles
-          </Link>
-        </div>
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-[22px]">
-          {posts.slice(0, 3).map((p) => (
-            <Link key={p.slug} href={`/blog#${p.slug}`} className="flex flex-col gap-3 rounded-xl text-navy no-underline" style={{ outlineOffset: 4 }}>
-              <Photo label={p.photo} className="aspect-[16/10] rounded-xl" sizes="(max-width: 700px) 100vw, 380px" />
-              <div className="flex flex-wrap items-center gap-2.5 text-[11.5px] font-bold uppercase tracking-[0.1em] text-gold-deep">
-                {p.cat}
-                <span className="font-medium normal-case tracking-normal text-meta">
-                  {p.date} · {p.read}
-                </span>
-              </div>
-              <h3 className="m-0 font-serif text-[22px] font-medium leading-[1.25] text-pretty">{p.title}</h3>
-              <p className="m-0 text-[14.5px] leading-[1.55] text-slate-2">{p.excerpt}</p>
-            </Link>
-          ))}
-        </div>
-      </section>
     </>
   );
 }

@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useId, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
-import { LINKS } from "@/lib/site";
 import { PlaceSuggestions } from "@/components/search/PlaceSuggestions";
+import { NewHomeNote } from "@/components/NewHomeNote";
 
 const TABS = ["New Homes", "Move-in Ready", "Sell", "Home Value"] as const;
 type Tab = (typeof TABS)[number];
@@ -134,14 +134,7 @@ export function HeroSearch() {
 
         <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
           {isSearch ? (
-            <a
-              href={LINKS.showingNew}
-              target="_blank"
-              rel="noopener"
-              className="inline-flex min-h-11 items-center py-2 text-[13.5px] font-semibold text-slate underline underline-offset-[3px]"
-            >
-              Browse all SoCal new homes ↗<span className="sr-only"> (opens in a new tab)</span>
-            </a>
+            <NewHomeNote variant="compact" className="min-w-[220px] flex-1" />
           ) : (
             <Link href="/contact" className="inline-flex min-h-11 items-center py-2 text-[13.5px] font-semibold text-slate underline underline-offset-[3px]">
               Or talk to Butchi first

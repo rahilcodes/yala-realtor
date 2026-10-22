@@ -44,6 +44,21 @@ export const LINKS = {
   sellersGuidePdf: "/guides/socal-sellers-guide.pdf",
 } as const;
 
+/** CA DRE public license lookup for a license number. */
+export const dreLookupUrl = (dre: string) => `https://www2.dre.ca.gov/publicasp/pplinfo.asp?License_id=${dre}`;
+
+/**
+ * YALA agents (client Rev2). Add `photo: "/images/agents/<file>.jpg"` when headshots arrive;
+ * until then the About page shows a blank placeholder.
+ */
+export const AGENTS: Array<{ name: string; dre: string; photo?: string }> = [
+  { name: "Bhargav Yalamuri", dre: "02057630" },
+  { name: "Kondal Vayineni", dre: "02160521" },
+  { name: "Ramesh Sanniboyina", dre: "02185582" },
+  { name: "Murali Rajendran", dre: "02229498" },
+  { name: "Shefali Golvelker", dre: "02325828" },
+];
+
 export const LENDER = {
   name: "C2 Financial",
   role: "Mortgage Consultant",

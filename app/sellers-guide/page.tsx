@@ -3,6 +3,7 @@ import Link from "next/link";
 import { DISCLOSURES, ESCROW_TIMELINE, LOCAL_MANDATES, PREP_CHECKLIST, SELL_STEPS } from "@/lib/sellersGuide";
 import { LINKS, SITE } from "@/lib/site";
 import { Icon } from "@/components/Icon";
+import { ClampBox } from "@/components/ClampBox";
 
 export const metadata: Metadata = {
   title: "The Ultimate Southern California Home Seller's Guide",
@@ -110,10 +111,12 @@ export default function SellersGuidePage() {
           </div>
           <div className="mt-8 grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-5">
             {DISCLOSURES.map((d) => (
-              <div key={d.abbr} className="flex flex-col gap-3 rounded-2xl border border-line bg-white p-7">
+              <div key={d.abbr} className="flex flex-col gap-2.5 rounded-2xl border border-line bg-white p-7">
                 <span className="self-start rounded-md bg-navy px-2.5 py-1 text-[12px] font-extrabold tracking-[0.08em] text-champagne">{d.abbr}</span>
                 <h3 className="h3 m-0 text-[21px]">{d.name}</h3>
-                <p className="m-0 text-[14.5px] leading-[1.65] text-slate-2">{d.body}</p>
+                <ClampBox lines={4}>
+                  <p className="m-0 text-[14.5px] leading-[1.55] text-slate-2">{d.body}</p>
+                </ClampBox>
               </div>
             ))}
           </div>

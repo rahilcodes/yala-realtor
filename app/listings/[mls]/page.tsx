@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { getListing, getSimilarListings } from "@/lib/data";
 import { todayISO } from "@/lib/format";
 import { Photo } from "@/components/Photo";
-import { MapPanel } from "@/components/MapPanel";
+import { MapEmbed } from "@/components/MapEmbed";
 import { ListingCard } from "@/components/ListingCard";
 import { PropertyActions } from "@/components/property/PropertyActions";
 import { InquiryCard } from "@/components/property/InquiryCard";
@@ -162,7 +162,7 @@ export default async function PropertyPage({ params }: PageProps<"/listings/[mls
             <h2 id="location" className="mb-4 font-serif text-[26px] font-medium leading-[1.2]">
               Location
             </h2>
-            <MapPanel label={`${listing.address} · nearby schools, parks, commute`} marker className="h-[320px] rounded-[14px]" />
+            <MapEmbed address={listing.fullAddress} className="h-[320px] rounded-[14px]" />
             {listing.schools.length > 0 && (
               <div className="mt-[18px] grid grid-cols-[repeat(auto-fit,minmax(min(100%,200px),1fr))] gap-3">
                 {listing.schools.map((s) => (
