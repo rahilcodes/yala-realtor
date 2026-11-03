@@ -6,7 +6,6 @@ import { LINKS as EXT, SITE } from "@/lib/site";
 const EXPLORE = [
   ["Buy a home", "/buy"],
   ["Sell a home", "/sell"],
-  ["Featured listings", "/listings"],
   ["The YALA Advantage", "/advantage"],
   ["Seller’s guide", "/sellers-guide"],
   ["About Butchi", "/about"],

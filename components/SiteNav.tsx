@@ -11,7 +11,6 @@ type NavLink = { label: string; href: string; external?: boolean };
 const NAV: NavLink[] = [
   { label: "Buy", href: "/buy" },
   { label: "Sell", href: "/sell" },
-  { label: "Listings", href: "/listings" },
   { label: "New Home Search", href: EXT.showingNew, external: true },
   { label: "YALA Advantage", href: "/advantage" },
   { label: "About", href: "/about" },

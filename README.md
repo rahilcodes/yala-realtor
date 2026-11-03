@@ -16,8 +16,7 @@ npm run lint
 | Route | Notes |
 | --- | --- |
 | `/` | "Find your next home in Southern California." Hero search (New Homes / Move-in Ready / Sell / Home Value) with the builder-registration note, real 2026 sales, valuation CTA, market pulse (C.A.R. monthly report) |
-| `/listings` | Featured homes with sort and List/Map toggle. The sticky search bar sends location + filters to the new-home search |
-| `/listings/[mls]` | Property page. Sample: `/listings/OC24188214` (78 Winding Way) |
+| `/listings`, `/listings/[mls]` | **Hidden** (Nov 2026): redirected to ShowingNew in `next.config.ts` until the CRMLS/IDX feed is connected. Delete the two redirect entries to bring the pages back |
 | `/buy` | Buyer path, Southern California introduction, five county guides with one-click new-home searches, C2 Financial pre-approval, CalHFA link, consultation form (`#consult`) |
 | `/sell` | Valuation form (`#valuation`, pre-fills `?address=`), $260M volume, 2026 buyer-side sales (OneHome links), six-step process, Seller's Guide download |
 | `/sellers-guide` | Web version of "The Ultimate Southern California Home Seller's Guide" + PDF download (`public/guides/socal-sellers-guide.pdf`) |
@@ -77,6 +76,6 @@ node --experimental-strip-types scripts/probe-showingnew.mjs
 
 ## Still placeholder
 
-- The `/listings` page and property pages still use sample listings until the CRMLS feed is connected.
+- The `/listings` page and property pages (currently redirected) still use sample listings until the CRMLS feed is connected.
 - Client stories are hidden until real testimonials arrive (`getTestimonials` in `lib/data.ts`).
 - Footer social and legal links (`#`) need real URLs.
